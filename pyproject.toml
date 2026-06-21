@@ -1,0 +1,55 @@
+[build-system]
+requires = ["setuptools>=70", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "spotify-app-review-analyzer"
+version = "0.1.0"
+description = "AI agent to analyze Spotify app reviews and social discussions for discovery insights."
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+  "fastapi>=0.115",
+  "uvicorn>=0.30",
+  "pydantic>=2.8",
+  "pydantic-settings>=2.4",
+  "python-dotenv>=1.0",
+  "SQLAlchemy>=2.0",
+  "psycopg>=3.2",
+  "alembic>=1.13",
+  "pyyaml>=6.0",
+  "httpx>=0.27",
+  "google-play-scraper>=1.2",
+  "scikit-learn>=1.5",
+  "groq>=0.13",
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=8.0",
+  "httpx>=0.27",
+  "ruff>=0.6",
+]
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[project.scripts]
+ingest = "spotify_app_review_analyzer.ingestion.cli:main"
+bootstrap-raw-data = "spotify_app_review_analyzer.scripts.bootstrap_raw_data:main"
+process = "spotify_app_review_analyzer.processing.cli:main"
+analyze = "spotify_app_review_analyzer.analytics.cli:main"
+agent = "spotify_app_review_analyzer.agent.cli:main"
+trends = "spotify_app_review_analyzer.trends.cli:main"
+api-server = "spotify_app_review_analyzer.api.cli:main"
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP"]
+

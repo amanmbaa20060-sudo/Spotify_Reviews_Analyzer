@@ -1,0 +1,83 @@
+{
+  "runs_per_question": 1,
+  "results": [
+    {
+      "rq_id": "rq1",
+      "question": "Why do users struggle to discover new music?",
+      "runs": [
+        {
+          "run": 1,
+          "citations": 0,
+          "guardrail_passed": true,
+          "latency_ms": 227,
+          "used_groq": false
+        }
+      ]
+    },
+    {
+      "rq_id": "rq2",
+      "question": "What are the most common frustrations with recommendations?",
+      "runs": [
+        {
+          "run": 1,
+          "citations": 0,
+          "guardrail_passed": true,
+          "latency_ms": 232,
+          "used_groq": false
+        }
+      ]
+    },
+    {
+      "rq_id": "rq3",
+      "question": "What listening behaviors are users trying to achieve?",
+      "runs": [
+        {
+          "run": 1,
+          "citations": 0,
+          "guardrail_passed": true,
+          "latency_ms": 196,
+          "used_groq": false
+        }
+      ]
+    },
+    {
+      "rq_id": "rq4",
+      "question": "What causes users to repeat the same content?",
+      "runs": [
+        {
+          "run": 1,
+          "citations": 0,
+          "guardrail_passed": true,
+          "latency_ms": 207,
+          "used_groq": false
+        }
+      ]
+    },
+    {
+      "rq_id": "rq5",
+      "question": "Which segments have different discovery challenges?",
+      "runs": [
+        {
+          "run": 1,
+          "citations": 0,
+          "guardrail_passed": true,
+          "latency_ms": 275,
+          "used_groq": false
+        }
+      ]
+    },
+    {
+      "rq_id": "rq6",
+      "question": "What unmet needs appear consistently?",
+      "runs": [
+        {
+          "run": 1,
+          "citations": 0,
+          "guardrail_passed": true,
+          "latency_ms": 0,
+          "used_groq": false
+        }
+      ]
+    }
+  ]
+}

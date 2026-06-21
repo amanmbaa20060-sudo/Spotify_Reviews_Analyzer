@@ -1,0 +1,57 @@
+{
+  "generated_at": "2026-06-20T08:13:58.002605+00:00",
+  "window_days": 7,
+  "social_processed_count": 383,
+  "viral_summary": {
+    "viral": 104,
+    "steady_state": 279
+  },
+  "burst_signals": [],
+  "rising_themes": [
+    {
+      "theme_id": "rq5.platform.ios",
+      "source_key": "mastodon",
+      "current_count": 6,
+      "baseline_avg": 5.75,
+      "growth_ratio": 1.04
+    },
+    {
+      "theme_id": "rq1.search.browse_friction",
+      "source_key": "mastodon",
+      "current_count": 1,
+      "baseline_avg": 1.0,
+      "growth_ratio": 1.0
+    },
+    {
+      "theme_id": "rq3.intent.active_discovery",
+      "source_key": "mastodon",
+      "current_count": 1,
+      "baseline_avg": 1.0,
+      "growth_ratio": 1.0
+    },
+    {
+      "theme_id": "rq6.unmet.transparency",
+      "source_key": "mastodon",
+      "current_count": 1,
+      "baseline_avg": 1.0,
+      "growth_ratio": 1.0
+    },
+    {
+      "theme_id": "rq2.relevance.mismatch",
+      "source_key": "mastodon",
+      "current_count": 1,
+      "baseline_avg": 1.33,
+      "growth_ratio": 0.75
+    }
+  ],
+  "cross_source_rq2_themes": [
+    "rq2.relevance.mismatch",
+    "rq2.control.lack_of_controls",
+    "rq2.repetition.stale",
+    "rq2.diversity.genre_stagnation"
+  ],
+  "source_counts": {
+    "social": 781,
+    "app_store": 360
+  }
+}

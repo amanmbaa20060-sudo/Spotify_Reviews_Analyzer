@@ -1,0 +1,189 @@
+review_id,source,rating,sentiment,themes,research_questions,confidence,text
+53147df7-d21b-46f8-a27e-cf97517f3c58,reddit,"Any way to set shuffle to a true RNG?
+
+[removed]",neutral,,,0.45,
+70fd955b-eb05-4f15-b6e5-15b6fed6e718,app_store,"spotify is so good, i love how many deals they have for the premium spotify, and how even without it, you can pick what order the song plays in, i’ve had spotify for over 5 years and it’s a great app",positive,rq5.tier.free_vs_premium,rq5,0.67,5
+e8cf1111-fd68-4867-8b6e-3b3834dff314,app_store,It’s good at first but after a while it doesn’t let you listen to music unless you buy premium I think it might be a Spotify storage thing but it won’t let me listen to any of my music,positive,rq5.tier.free_vs_premium,rq5,0.67,5
+43a51427-204e-431d-a765-3ac1a7ae8d2e,play_store,"amazing, love listening to music and Spotify makes it 100 times easier",positive,,,0.55,5
+31edbb90-6e2f-4e60-9c87-994b164528ef,play_store,I pay for a premium membership but then it limits the amount of time I can listen to audiobooks to 15 hours. I received an email suggesting that I buy more hours- this feels a bit scammy that my premium membership doesn't allow me to access unlimited audio book listening. Stop making access so difficult and treating educational content as a profit making mechanism when you already charge a fee that is being paid !,negative,rq5.tier.free_vs_premium,rq5,0.67,1
+e45efb1f-c5b5-4431-a6e1-27a5fa181f7e,play_store,my Spotify isn't working,positive,,,0.55,4
+be243bd7-413f-4d58-9cbc-97d96a5231ef,app_store,"I would give a no star if it was possible. Contacting Spotify is incredibly hard. All they have is AI robots responding to you. I use Spotify Free on iPhone. I understand ads are part of the free service, but I don’t want recommended songs inserted into playlists I created. I would like an option to turn off Smart Shuffle without requiring Premium. If this continues, I am seriously considering deleting my account and just leaving Spotify and finding a different music provider.",negative,rq5.platform.ios;rq5.tier.free_vs_premium,rq5,0.79,1
+8db574db-29e1-4c8d-a4ae-24090256d22c,app_store,Spotify is pushing AI hard and I’m tired of it; looking forward to switching to a different music app entirely.,negative,,,0.55,1
+0651c1d6-28d4-4eb4-98f1-99dddbf26381,reddit,"How can I transfer my Apple Music to Spotify?
+
+I’ve seen a few services but they all do playlists and I rarely make playlists. I just have thousands of songs sitting around without playlists like a psycho…. Also what service is best?",positive,rq5.platform.ios,rq5,0.67,
+6b4631d3-225a-4068-8adb-6b29add14a05,app_store,Best app to listen to music on I have no ads and I don’t even pay,negative,rq5.tier.free_vs_premium,rq5,0.67,1
+a49c37bc-4d1a-430d-9055-6401c5199ea4,reddit,It’s raining where I’m at rn. Got this running in the background while studying.,neutral,rq3.intent.background;rq3.intent.focus_workout,rq3,0.69,
+87be2678-b367-497a-b561-3290c906e58e,play_store,too many adds and restrictions for free users,negative,rq1.overwhelm.choice_overload,rq1,0.67,2
+14e1fcf7-5052-4a92-93c7-7d3d9b43700c,app_store,Just have some headphones and you’ll understand,positive,,,0.55,5
+82a1f28b-e9e0-4609-907c-400d310a097a,app_store,I pay so much for this app to keep glitching and freezing up. It’s constantly kicking me out.,negative,,,0.55,1
+2e906faa-0e39-4498-81f9-2d3a8b5c8365,app_store,This app is slay. Fairly self explanatory.,positive,,,0.55,5
+951f181e-0c20-43fc-9001-6b6389197f65,play_store,band kar Dalo spotify ko kuch kame ka nahi ha,negative,,,0.55,1
+ed060b74-c6da-4505-bdb6-c866e505880b,play_store,1 Song. 2 adverts. na unna buy data for me? Suggested songs out of my interest,negative,,,0.55,1
+27c361e3-2098-43f8-a3d0-ff7b90b6496b,reddit,"Date Night Playlist Assistance
+
+Every “date night” playlist I can find is just overly sexual and I don’t need that during my at home kitchen dates. I’m looking for like, subtly suggestive in vibe not talking about doing things on the kitchen counter. As a couple examples, Stay For A While by Victor Ray and Don’t Walk Away by The Driver Era are kind of the vibe I’m going for. More dancing in the dark less talking about take your clothes off?? Idk how to describe the vibe I’m really looking for, so I guess anything that matches the examples I gave would be great 😭",positive,,,0.55,
+fe326e67-a6d8-46ff-9d4e-8dd70428e7e6,reddit,"Any great synthwave tracks out there?
+
+I recently really got into synthwave music and I'm now looking for the best synthwave, dreamwave, spacewave and chillwave tracks out there.
+
+I'm okey with popular and small artists, as long the tracks are really good and not just pumped out.. if you know what I mean. 
+
+For example I love these few tracks:
+
+Private caller by z.y.l.a.r
+Spacebunny by stoto
+Animated - slowed to perfection by frequency
+
+Anyway hope to find more awesome synthwave tracks!",positive,,,0.55,
+7aef727a-7d9c-4947-9622-fc2735731260,app_store,Good ahh songs on here helps me relax and stuff,positive,,,0.55,5
+f9806246-716f-43ea-b494-fd63d050af49,reddit,"Why is my app crashing when I open the song info thing? [ANDROID]
+
+I can't even forward songs or it will crash.
+
+I already reinstalled the app, cleared cache, rebooted my phone. I don't know what else to do",neutral,rq5.platform.android,rq5,0.57,
+69ebe5c9-9877-4b27-871d-1434db1feffe,play_store,"wish I could give 0 starts this is third class , application to play every other song it's asking to get primium , feels like always begging ghatiyaaaa , Bakwaaaaaaa",negative,,,0.55,1
+5f704b7a-90fc-4066-9f29-80c73329676a,reddit,"Just Pure Hate Towards This New ""+ Create"" Button
+
+I mean what was the need for ts, it was already there under some other tab, and what about muscle memory duh , people including me will all be clicking on the create out of intention to click on library. It is such an unwanted feature. I think it should be removed or atleast placed elsewhere.",negative,,,0.55,
+ff820e9e-9a91-4164-8a2d-8007da68ae82,play_store,"Changed from 5 stars to 1. Swiping the screen should do nothing I'm sick and tired of skipping around everytime o accidently swipe the screen a tiny bit. Even worse it will lose my spot sometimes in the original so I have to figure out where I was in my episode. Update, So many bugs and glitches very frustrating that I pay monthly for this years later still awful can't get a single podcast to play today and they're downloaded",negative,rq4.risk.wasting_time,rq4,0.67,1
+58a545b7-7640-4b61-8805-6f87426418d5,play_store,best app in the entire world! never crashed out on me 😃,positive,,,0.55,5
+7573b9e1-1cb8-43b7-9e68-36beebe8e493,play_store,worst app ever. absolutely useless. only good part is that it works in backround. but. -cant repeat -cant choose (auto mix) -premium is expensive -cant skip to a part of the song. you need to wait.,negative,rq2.repetition.stale;rq4.risk.wasting_time;rq5.tier.free_vs_premium,rq2;rq4;rq5,0.91,1
+7542ffb4-28cb-49af-bc29-b1bcbf120b4f,reddit,"PLEASE FOR THE LOVE OF GOD SPOTIFY make your user interface updates actually improve the user experience — not worsen it.
+
+Maybe I’m jaded, but I’ve been a Spotify user since 2009.
+
+Year after year, the user interface has adjustments on mobile and desktop, and they are not to my benefit. They don’t reflect how I use the app and listen to music. 
+
+I’ve been taking the -1HP as a user on this for years and years but I finally think I’m going to switch and use one of those sites that imports my music over to a different app.
+
+I’ve only stayed because of the convenience of not switching my library over, however, the inconvenience of these updates has brought me to my end.
+
+Please, someone tell me I’m not alone in this thinking. Or maybe I am and I’m just a legacy user and my time has come.",positive,,,0.55,
+9a44b691-da61-4e9a-b7b7-190cdbc8a845,play_store,beautiful app get the premium you won't regret it,positive,rq5.tier.free_vs_premium,rq5,0.67,5
+f993b3fe-5dfa-407f-92f3-8df4eb019ec0,app_store,"FOR SOME REASON WHEN I HAVE SERVICE(not all the time but sometimes) IM OFFLINE BUT THEN WHEN I HAVE SOS IM ONLINE…HOW DOES THAT MAKE SENSE???
+but good app cuz I have free premium in a sense",positive,rq5.tier.free_vs_premium,rq5,0.67,5
+88ebd2ac-d054-47c9-9e06-efddb944e9aa,app_store,The songs are amazing but every while or so I get like 7 ads. If you have less ads I would give 5 star.,positive,rq5.tier.free_vs_premium,rq5,0.67,4
+7a916bec-b209-48c5-93b4-4bf1362e518f,play_store,meh app. premium aint worth the price imo,neutral,rq5.tier.free_vs_premium,rq5,0.57,3
+7d73ea9d-deb9-467f-9a5c-9a30cc1458b8,play_store,"Most of the time it works, but it started to say it's offline when my connection is perfect. update 2026 - worked great for 2 years. made me replace a widget with a new one, which is exactly the same as the old one, only this time it doesnt work.",positive,,,0.55,3
+9e1ee1e9-295d-47c7-9fab-a73c3d11ce74,app_store,Glad to be back with Spotify,positive,,,0.55,5
+593f129f-d4c4-4b57-a875-d1711099a475,play_store,𝑣𝑒𝑟𝑦 𝑔𝑜𝑜𝑑 𝑓𝑜𝑟 𝑚𝑢𝑠𝑖𝑐,positive,,,0.55,5
+1b414723-4e9c-4c84-981d-a0bd6bcfebfe,play_store,Why am I getting ads during Podcasts? I already pay. Sometimes 3+ minutes of slop.,negative,rq5.tier.free_vs_premium,rq5,0.67,1
+c770585c-b957-41e2-9c16-423fd0fe6293,app_store,"Probably the worst music app ever. Kept signing me out of my account and the link to log back in kept glitching like crazy. It wouldn’t even go through. And this happens ALL THE TIME. Sometimes it takes over 3 hours just to log back in if it will let me. I also think there is way too many ads and I hate how you can’t pick what you want to listen to. I can’t listen to an album without it playing recommended tracks one song in. You also aren’t aloud to pick the songs you want to listen to. If you click on a song after searching it up, it just plays recommended tracks. I would rate it zero stars if I could.",negative,rq1.overwhelm.choice_overload;rq1.search.browse_friction;rq5.tier.free_vs_premium,rq1;rq5,0.91,1
+5fb23263-4046-4405-be23-a7fd41a4c9cd,play_store,"Mobile app completely stopped working with no fixes. Says ""something went wrong"" any time it tries to open. Clearing cache, uninstalling didn't do anything, my region didn't change, no VPN. I'm now paying for something that only works on my PC.",negative,,,0.55,1
+337d94f1-8718-4f99-921d-bc286497d9c7,app_store,"Alright I love Spotify. It has awesome music, lets me express anything, awesome podcasts and episodes and is a good study help. Period.",positive,rq3.intent.focus_workout,rq3,0.67,5
+25863baf-e162-4efd-91b9-8e083153f563,play_store,I had apple music and Spotify and I prefer Spotify.,positive,rq5.platform.ios,rq5,0.67,5
+680a1546-a527-43f4-ac4c-d1702d47fb0b,play_store,The best music player app of all time 5 stars deserved .,positive,,,0.55,5
+4d6fd5e3-3597-4827-bac0-f3a994c222ce,reddit,"Shows/podcasts that film in NYC office
+
+Wanted to know if any of you Spotify fans know about cool shows/podcasts that actually film at one of Spotify’s offices in New York City",neutral,,,0.45,
+087a430a-9f8f-4178-8a5f-fe623d049e92,play_store,THANK YOU FOR THE RESHUFFLE BUTTON. OVERDUE. but whys my search bar so slow? :(,neutral,rq1.search.browse_friction,rq1,0.57,3
+93bcd052-1594-426c-bc17-69cf98324d90,app_store,"I think it is stupid to pay so much money a month to listen to music, it should be free like it was before or the max price should be 5$",negative,,,0.55,2
+b8ac2b0c-d834-4244-bdc6-c2da5ee46340,play_store,so here I am I downloaded this fifteen days ago I think and today this said that I have to purchase premium membership to play a song twice or any specific part of it like the ads are also too long and I know it's the free version but it's still got room for huge improvement and it's not okay that if I wanted to play a specific part I have to give money to it this apps got two choice either make it better let us listen or make premium completely there is no use to let the users hang in between,negative,rq5.tier.free_vs_premium,rq5,0.67,1
+a55bfdc0-118f-4df5-9330-0400439bf1dd,reddit,"Give me a number from 1 to 25,084, I'll give you one of my liked songs. You're not ready for my music taste...",neutral,,,0.45,
+7bb325c7-3a58-4aef-9c8f-0b4267855bf1,app_store,Love being able to pick the song that pops into my head . Always available . Get premium.,positive,rq5.tier.free_vs_premium,rq5,0.67,5
+bcf3729f-4f1b-49b2-8979-bf3c9ecbfc96,play_store,app is not working Every time I log in it shows check your internet connection wht the heck every app on my phone is working on that connection and why it is not working on Spotify.,negative,,,0.55,1
+7a68470d-bbb7-4fb2-b68b-7d1ca074b44a,app_store,"I was Spotify’s biggest fan for 10 years, but I can’t take it anymore. The app is so buggy that it often takes a full minute before music will start playing (I have timed it). It freezes almost every time I try to navigate to a new page then spends another 30 seconds loading the content I try to play once it unfreezes.
+All of these new features are nice and all, but I’d rather the app actually work than make me another useless AI playlist.",negative,rq1.search.browse_friction,rq1,0.67,1
+a5ad6cb7-196f-412d-9db6-5158c7222258,reddit,"Spotify AI Accounts?
+
+Hello there!
+Im always listening to Release Radar every friday.. apart from the fact that it somehow got worse it is spamming me now with ai made music and accounts? Or am i wrong here
+Even the profile pics and album covers are made with ai.
+
+Link to picture bc. i cant add one here..
+https://imgur.com/a/gsF8DCM",neutral,,,0.45,
+0de0c364-4755-4afd-b7bf-07c94b179892,play_store,great music not alot of ads,positive,rq5.tier.free_vs_premium,rq5,0.67,5
+fd0d51ff-0a67-4d94-ad6c-83f6ed2eef08,reddit,"Spotify DJ Update I’ve never noticed
+
+I just opened Spotify this morning to a pleasant surprise. I use Spotify DJ every day, mostly in the mornings. 
+
+This morning, however, the DJ button had a little banner next to it saying “Hold DJ button to make a request”. And it was exactly as described, it asked for microphone access and I was able to talk to the DJ and request a specific artist be played! I’m sure genres work and others but I’ll need to try it out! 
+
+This is something I’ve been hoping for since the DJ came out, so, someone, please tell me if I’m late to this or not!",neutral,rq1.search.browse_friction,rq1,0.57,
+b341c882-009e-41de-a5f3-d0d9edd78235,reddit,"plus button on the screen main row 🫠
+
+[removed]",neutral,,,0.45,
+cf3ae93e-481d-4e5b-82d6-55b63644f1d9,play_store,"very nice app ,i am using this since 4 years",positive,,,0.55,5
+8146a737-4b3a-44c6-a9cf-10a5761cd150,reddit,"DJ new feature
+
+I just found out that the DJ can take recommendations. On the song page, you long press the blue circle, and it ‘listens’. I asked it to give me some edm that I haven’t heard before and it gave me three absolute bangers. It fixes the issue of DJ playing songs I listen to at certain times (I.e the dj won’t play study or sleep songs). The DJ is actually a great feature with this addition.",positive,rq3.intent.focus_workout,rq3,0.67,
+7aea7831-ae71-4f6f-9469-cf5e852b51b5,play_store,love the aap but Please for free users atleast fix continues ads make it 2 ads after 10 songs or else it's getting annoying,negative,rq5.tier.free_vs_premium,rq5,0.67,2
+a0ea3837-e6be-4f88-a41e-2de12e13aa59,app_store,Needs to let me play my music and not always have ads and I don’t want to keep paying for it js to listen and have skips I js want to listen to my music without so many ads and not having a lot of skips.,negative,rq4.risk.wasting_time;rq5.tier.free_vs_premium,rq4;rq5,0.79,1
+180f288b-cfd9-41d9-9abe-f5aab81a1652,app_store,Love the songs my fav is when I was your man by Bruno mars,positive,,,0.55,4
+47fe6c52-e333-4928-b717-b3456645a1c1,play_store,becoming a more & more laggy technical debt experience over time. seems to be more and more ads despite premium account. ads will sometimes break the thing it was trying to play. occasional stuttering playback despite attempts to fix bluetooth issues. hard work trying to find connections like Google nest reliably. Will complain it's trying to play something when the app isn't even open. algorithm is also broken where ai bots can list songs under legitimate artist names. Reinstall made it worse.,negative,rq4.trust.algorithm_fatigue;rq5.tier.free_vs_premium,rq4;rq5,0.79,2
+7f6fc88b-d656-4f44-a27b-0f942e3b3651,play_store,been a loyal paying customer for many years now and just lost about 700 songs from my list probably done with Spotify completely no point in wasting money when they will just delete your hard made playlists anyways please dont waste your time or money,negative,,,0.55,1
+e15b2977-0360-48a4-a856-cd091c84e550,app_store,Spotify is a really good musical app to listen to music or podcasts it also gives you notifications when a concert is happening or a new album is released!! i definitely recommend downloading Spotify!!,positive,rq2.relevance.mismatch,rq2,0.67,5
+ed16a10f-26e4-4416-8ee6-eb9e193cd002,app_store,I hate Spotify because it has too much ads and I’m NOT paying a few bucks 🤣✌️✌️,negative,rq5.tier.free_vs_premium,rq5,0.67,1
+4ac8a463-a4b5-4e92-9be2-4b19147d946f,play_store,Great app for listening to music and podcasts. Easy to use with a huge music library.,positive,,,0.55,5
+74e408fc-61d8-447a-ada9-425be829dd8b,reddit,Looking to expand my music taste  would love any sort of playlists/artists or suggestions!,positive,,,0.55,
+b9ee0a1f-20dc-4f87-a9e1-8fb3cd313ed9,play_store,"The app doesn't show any improvement, the new widget is absolutely the worst, the company doesn't support artists. I'm one short step away from moving from Spotify to some other bad app like Amazon Music, which at least could be cheaper.",negative,,,0.55,1
+060379b2-76df-4888-8c0d-d036b841c233,app_store,There is no adds even when your jamming to the song and it’s completely free. On mobile when you get out of the tab the song your jamming to still plays,positive,,,0.55,5
+950b78f0-d0ac-4bae-a61e-aa0a51b26828,play_store,"Flat out the best music app as far as I care to see 🙈🙉. Admittedly it doesn't have every single track for every artist. U tube comes close but u still have to sift through the bull $h!7 at times and all the ""type beats"" instrumentals. Best 🎶🎵🎶🎵🎧🎙️🎤🎚️🎛️ 🖥️💻🔉🔊🎧🥇🏆💯💯💯💯💯🎉💥💫💨🤖🤘",positive,,,0.55,5
+37d258cc-d4af-40b4-8745-37a771a1890e,play_store,one of the worst music app since it's last update. like you have not to skip and choose what you want to listen.👎👎👎,negative,rq4.risk.wasting_time,rq4,0.67,1
+b13b6d42-2e7c-4d8f-ab7c-616afc39cb98,play_store,Best in the music world,positive,,,0.55,5
+67a09926-24c9-427a-8e3b-ea75b97b13bb,play_store,"prefer the previous version of how it looked when I went to add a song to a playlist. I'd also like if I could have certain songs excluded from my Spotify Wrapped. Every year, mine is just songs I go to sleep to. 😭 shuffle could also be better. Love everything else, though!",positive,,,0.55,3
+0b4ab10b-911f-4e4c-9e32-ebeec716b37d,reddit,"AI playlist could be better and more specific
+
+The idea of an ai generating a playlist for you could be used better than just being another algorithm but with an annoying voice. Actually, it could be something creative if it was designed in a way where you could type (for example) ""songs that give the same vibe as the meet the Robinsons scene where they show the future"" and feed it some songs that already match that idea you have. Unfortunately, the algorithm can't do that already because as soon as you dare putting a TikTok song you're doomed to just hear TikTok music
+
+Honestly, I thought this is what the ai dj was meant to. What y'all think? Or did you guys knew it was gonna be this way from the beginning?",neutral,rq4.trust.algorithm_fatigue,rq4,0.57,
+c4723160-aa07-42ef-9131-c3b43fa19756,app_store,I recommend both versions such as premium and standard are great I will use Spotify foreverrr,positive,rq5.tier.free_vs_premium,rq5,0.67,5
+89845301-950a-4576-8b2b-97c6cc34bbec,reddit,"What does the ‘eat playlist’ button do?
+
+I don’t want to press it, but I want to know what it does",neutral,,,0.45,
+e4108ac4-7ed5-4eff-88dc-fe8933d7adee,reddit,"How crazy has your music taste changed?
+
+For example; I went from listening to Pierce the Veil, to random 80’s music, to bachata, to emo rap, to modern hiphop, to rage music, and now edm House music.",neutral,,,0.45,
+4b2f5770-a6c4-4860-85b6-a3c1ab79be15,app_store,"I love this app, it’s the best music app",positive,,,0.55,5
+d049542c-6fda-4f0c-acf2-023db838669e,reddit,"AI Generated Playlists
+
+I've seen a lot of hate on the recent update that pushed out the ""Create"" button. Maybe it's not the best location for it, but I'm already finding the new AI playlist feature helpful!
+
+I've been trying to get more into running and my main issue is that I'll start a run at too fast of a pace and tire out quickly. I've found 150 steps per minute is a good pace for me, so I've been creating a playlist of songs that are around 150 bpm. Today, I tried asking the AI to make me a playlist of 150 bpm rap workout songs, and it gave me a 3 hour playlist of songs (mostly) in the 140-160 bpm range. It's not perfect, but I'm probably adding 75% of the songs it gave me to my current playlist. I've been slowly adding to this playlist myself for a couple months now and I just doubled the amount of songs I had in there in about 15 minutes. 
+
+  
+So now I'm curious, has anyone else has found some creative uses for the AI playlists or other ""create"" features?",positive,rq3.intent.focus_workout,rq3,0.67,
+ffebee1e-3a0a-4e04-baf2-f1ca1066a14f,app_store,After sometime we can’t play song by our choice so the time limit of our choice must be extended otherwise best experience of Spotify 🫶🏻,positive,,,0.55,4
+b71e95be-924f-4b02-8414-cad45e5cdbc7,reddit,"Building a playlist
+
+What else would work on this?",neutral,,,0.45,
+2b2e7d8b-32dd-4948-a267-f398c00dd2db,play_store,I can't open the app it says something went wrong,negative,,,0.55,1
+b0b8479d-660f-49a2-8852-34df6ed428f7,play_store,this app work 💪 very well 😀 as long you have wifi 😀,positive,,,0.55,5
+035e495e-5c2d-40b7-abd8-6a242f69a3d0,reddit,"How Long Does Spotify’s Login (w/o password) Email take to send?
+
+For context, I have my Spotify account on my phone and I’m trying to get it on this iPad to have it on both my devices. The problem is this device has a different account signed into it (it’s this whole thing) and would take way too much to change that. So, I have to login with email and get it sent, right? Well I needed to get my Gmail to the one on my phone since the personal one wouldn’t work, and the verification  email was supposedly sent.
+
+It’s been a while now and it’s shown no signs of actually starting to send, and I don’t know what else to do.
+
+(Also, I needed to log in with my username instead of the email for some reason because it wouldn’t work otherwisw if that means anything)",neutral,rq5.platform.ios,rq5,0.57,
+94b3563f-2365-4d02-9418-2ce2ff79e760,reddit,"This company has no clue!
+
+My Spotify Premium expired and as a U.S. Citizen living in a foreign country, Spotify will accept neither my PayPal account nor my credit card to pay for my Premium account here because the payment method is not from the current nation I am living in! Gee, what a novel concept in the 21st Century — living in a different nation other than my home nation.",neutral,rq5.tier.free_vs_premium,rq5,0.57,
+c1bdfb61-31be-44bd-8e57-06bbb88fd679,play_store,If you are on Pixel 7a with the latest Android 17 and can't play on bluetooth devices. Try turning off equalizers in the playback menu through the settings. hope this helps. It seems that Android 17 sound system is broken right now.,positive,rq5.platform.android,rq5,0.67,5
+d6b09702-842a-42a2-b9ad-b76d4bfd37a8,play_store,Thanks to Spotify,positive,,,0.55,5
+1165b39c-7b23-41c8-8959-63879b996082,app_store,If you don’t have premium you get treated like a slave,negative,rq5.tier.free_vs_premium,rq5,0.67,1
+afb58654-b732-400a-9f7c-c47fe054f814,play_store,I love Spotify 💝,positive,,,0.55,5
+0ee27210-4636-4a83-9bfb-a576a49f872a,play_store,Spotify is simply the best 🔥🔥,positive,,,0.55,5
+5e63fa77-cf7d-499b-946b-7df4808c3900,play_store,this is trashhh I can't even search a song and it always says check your internet connection but it's all good,negative,rq1.search.browse_friction,rq1,0.67,1
+21036f67-9355-4641-87f2-dafa7fadf990,play_store,"Spotify is useless, very useless after downloading my offline songs Spotify cleaned my downloads without permission no after downloading twice wasting almost 10 gigs of data just to download music on Spotify most of the songs that I can't play them offline. I really wish I can give them a zero star",negative,rq5.tier.free_vs_premium,rq5,0.67,1
+a4588843-8d0c-4744-9f2c-23ecda45eab6,app_store,Spotify hands down the best app for music with all of it extra features,positive,,,0.55,5
+9a4f11dd-e924-42ac-b12e-93ce1efe460c,play_store,I've had this app for years now and I love it. I splurge for the premium version so no ads unless listening to a prerecorded podcast. I do wish they had unlimited listening hours with books.,positive,rq5.tier.free_vs_premium,rq5,0.67,5
+45c1cc7c-1096-41ca-800e-a704d14e4803,reddit,"Spotify crashing
+
+My Spotify has been crashing every time I open the queue. I've messed with the settings,  undownloaded/redownloaded thr app, restarted my phone--- no change. Any way to fix this?",neutral,,,0.45,
+d03a9ce4-8ff6-4919-97f8-90de8c6d4c33,play_store,4 ads every 2 songs. you are treating the consumer as a joke. it's diabolical that you think that is a good experience,negative,rq5.tier.free_vs_premium,rq5,0.67,1
+c54acef3-9166-4da6-927d-61bb344e51ce,play_store,"Used to be so good , short ads , atleast 30mins of listening music without interruption..now it's just pathetic. If i could i would've given it a negative star.",negative,rq5.tier.free_vs_premium,rq5,0.67,1
+dd350235-43d9-41d2-a2a6-60ef251fb1df,reddit,"Technical question
+
+I did some new playlists and set them as public but they don’t appear on my user profile or search.
+
+Does anyone know what it might be the issue? Thx",neutral,rq1.search.browse_friction,rq1,0.57,
+4baa9bff-8b01-448c-8e4e-f1b10ac61d9d,play_store,cant do a search after the last update. keeps saying something went wrong on 5 bar 5G and wifi.,negative,rq1.search.browse_friction,rq1,0.67,1
+75c9d55a-6654-4a8d-88ae-4c9f2c98e958,reddit,"I remember clicking hide song on a couple profiles on accident when I meant to like and can’t find the hidden list where would i find them on there?
+
+For context I’m talking about when you open a artist page and just press play not a specific album",neutral,,,0.45,
+17a8cd26-d793-423d-85e9-940c04120af1,play_store,cool but itd be good if the pc app didnt pause music if you closed the mobile app while the pc app was playing. does that make sense?,positive,,,0.55,4
+20f1a3db-0d94-4382-864a-fa55b8a54519,app_store,I love it it Makes me feel so calm to listen to my music,positive,,,0.55,5
+6b2009dd-816a-42c7-99a7-437f59dbb284,play_store,"I didnt see any problems with it, I really enjoy the songs and that this app has lyrics for most songs too. This music app great! ^^",positive,,,0.55,5
+6b649f1b-a26b-4a9c-abb2-33eab0c565df,play_store,I like Spotify but I don't know why it stops playing after opening another app. that's wrong and it has being happening several times. it suppose to continue playing even after I have watched a video,positive,,,0.55,5

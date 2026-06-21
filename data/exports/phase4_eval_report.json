@@ -1,0 +1,482 @@
+{
+  "started_at": "2026-06-19T10:45:51.613202+00:00",
+  "finished_at": "2026-06-19T10:51:27.881461+00:00",
+  "summary": {
+    "automated_passed": 21,
+    "automated_total": 28,
+    "all_automated_passed": false
+  },
+  "checks": [
+    {
+      "id": "EC-4A.1",
+      "name": "RQ briefing exports exist",
+      "passed": true,
+      "detail": "data\\exports\\rq_briefing.md, data\\exports\\rq_briefing.json",
+      "manual": false
+    },
+    {
+      "id": "EC-4A.2",
+      "name": "All six RQs have themes, sentiment, \u22653 exemplars",
+      "passed": true,
+      "detail": "rq1: themes=4, exemplars=12, sentiment=True; rq2: themes=4, exemplars=11, sentiment=True; rq3: themes=4, exemplars=12, sentiment=True; rq4: themes=4, exemplars=12, sentiment=True; rq5: themes=3, exemplars=9, sentiment=True; rq6: themes=3, exemplars=9, sentiment=True",
+      "manual": false
+    },
+    {
+      "id": "EC-4A.3",
+      "name": "Aggregated counts match SQL verification",
+      "passed": true,
+      "detail": "[]",
+      "manual": false
+    },
+    {
+      "id": "EC-4A.4",
+      "name": "PM sign-off on RQ briefing accuracy",
+      "passed": false,
+      "detail": "Requires manual Growth PM review of data/exports/rq_briefing.md",
+      "manual": true
+    },
+    {
+      "id": "4.1",
+      "name": "search_reviews with filters",
+      "passed": false,
+      "detail": "count=0",
+      "manual": false
+    },
+    {
+      "id": "4.2",
+      "name": "aggregate_themes last 90 days matches SQL",
+      "passed": true,
+      "detail": "tool={'theme_id': 'rq2.repetition.stale', 'label': 'Recommendations are repetitive / stale', 'count': 18}, sql=[('rq2.repetition.stale', 18)]",
+      "manual": false
+    },
+    {
+      "id": "4.3",
+      "name": "compare_segments iOS vs Android",
+      "passed": true,
+      "detail": "signals=3",
+      "manual": false
+    },
+    {
+      "id": "4.5",
+      "name": "detect_cross_source_themes",
+      "passed": true,
+      "detail": "themes=3",
+      "manual": false
+    },
+    {
+      "id": "4.7",
+      "name": "Out-of-scope question refused",
+      "passed": true,
+      "detail": "I can only answer questions grounded in Spotify app review and Reddit discovery feedback. Question appears out of scope for the review corpus",
+      "manual": false
+    },
+    {
+      "id": "4.8",
+      "name": "Insufficient data \u2014 no fabrication",
+      "passed": false,
+      "detail": "TikTok users are not directly mentioned in the provided evidence, which focuses on Spotify app user feedback. However, the evidence does discuss Spotify music d",
+      "manual": false
+    },
+    {
+      "id": "4.10",
+      "name": "Multi-step query uses \u22652 tools",
+      "passed": true,
+      "detail": "tools=['build_rq_briefing', 'compare_sources', 'detect_cross_source_themes']",
+      "manual": false
+    },
+    {
+      "id": "4.11",
+      "name": "Follow-up question in session",
+      "passed": true,
+      "detail": "latency_ms=9949",
+      "manual": false
+    },
+    {
+      "id": "4.4",
+      "name": "summarize_research_question RQ2",
+      "passed": true,
+      "detail": "citations=11, guardrail=True",
+      "manual": false
+    },
+    {
+      "id": "EC-4.1-rq1",
+      "name": "Golden question RQ1 (\u22652/3 runs)",
+      "passed": true,
+      "detail": "passes=3/3",
+      "manual": false
+    },
+    {
+      "id": "EC-4.1-rq2",
+      "name": "Golden question RQ2 (\u22652/3 runs)",
+      "passed": true,
+      "detail": "passes=3/3",
+      "manual": false
+    },
+    {
+      "id": "EC-4.1-rq3",
+      "name": "Golden question RQ3 (\u22652/3 runs)",
+      "passed": true,
+      "detail": "passes=3/3",
+      "manual": false
+    },
+    {
+      "id": "EC-4.1-rq4",
+      "name": "Golden question RQ4 (\u22652/3 runs)",
+      "passed": true,
+      "detail": "passes=3/3",
+      "manual": false
+    },
+    {
+      "id": "EC-4.1-rq5",
+      "name": "Golden question RQ5 (\u22652/3 runs)",
+      "passed": true,
+      "detail": "passes=3/3",
+      "manual": false
+    },
+    {
+      "id": "EC-4.1-rq6",
+      "name": "Golden question RQ6 (\u22652/3 runs)",
+      "passed": false,
+      "detail": "passes=0/3",
+      "manual": false
+    },
+    {
+      "id": "EC-4.2",
+      "name": "Citation coverage \u226590% on golden set (83%)",
+      "passed": false,
+      "detail": "15/18 runs had citations",
+      "manual": false
+    },
+    {
+      "id": "4.12",
+      "name": "agent_queries audit log populated",
+      "passed": true,
+      "detail": "rows=29",
+      "manual": false
+    },
+    {
+      "id": "4.13",
+      "name": "Simple query latency p95 <10s",
+      "passed": false,
+      "detail": "p95_ms=42029",
+      "manual": false
+    },
+    {
+      "id": "4.14",
+      "name": "Complex multi-tool query p95 <30s",
+      "passed": true,
+      "detail": "p95_ms=2633",
+      "manual": false
+    },
+    {
+      "id": "4.15",
+      "name": "Token usage documented for golden set",
+      "passed": true,
+      "detail": "input=36531, output=11925, total=48456",
+      "manual": false
+    },
+    {
+      "id": "EC-4.6",
+      "name": "Prompt templates versioned in repo",
+      "passed": true,
+      "detail": "C:\\Users\\Rukma\\SpotifyAppReview\\src\\spotify_app_review_analyzer\\agent\\prompts\\v1.0\\system.md",
+      "manual": false
+    },
+    {
+      "id": "EC-4.4",
+      "name": "Agent CLI available",
+      "passed": true,
+      "detail": "python -m agent ask|chat|golden|summarize",
+      "manual": false
+    },
+    {
+      "id": "4.16",
+      "name": "Automated golden-question script runnable",
+      "passed": true,
+      "detail": "scripts/run_phase4_eval.py",
+      "manual": false
+    },
+    {
+      "id": "EC-4.3",
+      "name": "No hallucination on out-of-scope / empty-data tests",
+      "passed": false,
+      "detail": "",
+      "manual": false
+    },
+    {
+      "id": "EC-4.5",
+      "name": "Latency targets met",
+      "passed": false,
+      "detail": "",
+      "manual": false
+    }
+  ],
+  "golden_results": [
+    {
+      "rq_id": "rq1",
+      "question": "Why do users struggle to discover new music?",
+      "runs": [
+        {
+          "run": 1,
+          "passed": true,
+          "detail": "citations=11, barrier_terms=7",
+          "citations": 11,
+          "guardrail_passed": true,
+          "latency_ms": 2361,
+          "input_tokens": 2536,
+          "output_tokens": 777
+        },
+        {
+          "run": 2,
+          "passed": true,
+          "detail": "citations=11, barrier_terms=7",
+          "citations": 11,
+          "guardrail_passed": true,
+          "latency_ms": 14127,
+          "input_tokens": 2536,
+          "output_tokens": 1051
+        },
+        {
+          "run": 3,
+          "passed": true,
+          "detail": "citations=11, barrier_terms=7",
+          "citations": 11,
+          "guardrail_passed": true,
+          "latency_ms": 41932,
+          "input_tokens": 2536,
+          "output_tokens": 1060
+        }
+      ],
+      "passes": 3,
+      "required_passes": 2,
+      "passed": true
+    },
+    {
+      "rq_id": "rq2",
+      "question": "What are the most common frustrations with recommendations?",
+      "runs": [
+        {
+          "run": 1,
+          "passed": true,
+          "detail": "citations=9, themes_or_counts=True",
+          "citations": 9,
+          "guardrail_passed": true,
+          "latency_ms": 2857,
+          "input_tokens": 2412,
+          "output_tokens": 883
+        },
+        {
+          "run": 2,
+          "passed": true,
+          "detail": "citations=11, themes_or_counts=True",
+          "citations": 11,
+          "guardrail_passed": true,
+          "latency_ms": 11882,
+          "input_tokens": 2412,
+          "output_tokens": 992
+        },
+        {
+          "run": 3,
+          "passed": true,
+          "detail": "citations=11, themes_or_counts=True",
+          "citations": 11,
+          "guardrail_passed": true,
+          "latency_ms": 42029,
+          "input_tokens": 2412,
+          "output_tokens": 769
+        }
+      ],
+      "passes": 3,
+      "required_passes": 2,
+      "passed": true
+    },
+    {
+      "rq_id": "rq3",
+      "question": "What listening behaviors are users trying to achieve?",
+      "runs": [
+        {
+          "run": 1,
+          "passed": true,
+          "detail": "citations=11, behavior_terms=4",
+          "citations": 11,
+          "guardrail_passed": true,
+          "latency_ms": 2506,
+          "input_tokens": 2398,
+          "output_tokens": 773
+        },
+        {
+          "run": 2,
+          "passed": true,
+          "detail": "citations=11, behavior_terms=4",
+          "citations": 11,
+          "guardrail_passed": true,
+          "latency_ms": 11257,
+          "input_tokens": 2398,
+          "output_tokens": 750
+        },
+        {
+          "run": 3,
+          "passed": true,
+          "detail": "citations=11, behavior_terms=4",
+          "citations": 11,
+          "guardrail_passed": true,
+          "latency_ms": 2440,
+          "input_tokens": 2398,
+          "output_tokens": 759
+        }
+      ],
+      "passes": 3,
+      "required_passes": 2,
+      "passed": true
+    },
+    {
+      "rq_id": "rq4",
+      "question": "What causes users to repeat the same content?",
+      "runs": [
+        {
+          "run": 1,
+          "passed": true,
+          "detail": "citations=12, comfort=True, friction=True",
+          "citations": 12,
+          "guardrail_passed": true,
+          "latency_ms": 38349,
+          "input_tokens": 2573,
+          "output_tokens": 671
+        },
+        {
+          "run": 2,
+          "passed": true,
+          "detail": "citations=12, comfort=True, friction=True",
+          "citations": 12,
+          "guardrail_passed": true,
+          "latency_ms": 3613,
+          "input_tokens": 2573,
+          "output_tokens": 880
+        },
+        {
+          "run": 3,
+          "passed": true,
+          "detail": "citations=12, comfort=True, friction=True",
+          "citations": 12,
+          "guardrail_passed": true,
+          "latency_ms": 14754,
+          "input_tokens": 2573,
+          "output_tokens": 897
+        }
+      ],
+      "passes": 3,
+      "required_passes": 2,
+      "passed": true
+    },
+    {
+      "rq_id": "rq5",
+      "question": "Which segments have different discovery challenges?",
+      "runs": [
+        {
+          "run": 1,
+          "passed": true,
+          "detail": "citations=7, segment_terms=5",
+          "citations": 7,
+          "guardrail_passed": true,
+          "latency_ms": 37208,
+          "input_tokens": 2258,
+          "output_tokens": 588
+        },
+        {
+          "run": 2,
+          "passed": true,
+          "detail": "citations=6, segment_terms=5",
+          "citations": 6,
+          "guardrail_passed": false,
+          "latency_ms": 2163,
+          "input_tokens": 2258,
+          "output_tokens": 512
+        },
+        {
+          "run": 3,
+          "passed": true,
+          "detail": "citations=6, segment_terms=5",
+          "citations": 6,
+          "guardrail_passed": false,
+          "latency_ms": 2346,
+          "input_tokens": 2258,
+          "output_tokens": 563
+        }
+      ],
+      "passes": 3,
+      "required_passes": 2,
+      "passed": true
+    },
+    {
+      "rq_id": "rq6",
+      "question": "What unmet needs appear consistently?",
+      "runs": [
+        {
+          "run": 1,
+          "passed": false,
+          "detail": "citations=0, need_terms=0, cross_source=False",
+          "citations": 0,
+          "guardrail_passed": true,
+          "latency_ms": 0,
+          "input_tokens": null,
+          "output_tokens": null
+        },
+        {
+          "run": 2,
+          "passed": false,
+          "detail": "citations=0, need_terms=0, cross_source=False",
+          "citations": 0,
+          "guardrail_passed": true,
+          "latency_ms": 0,
+          "input_tokens": null,
+          "output_tokens": null
+        },
+        {
+          "run": 3,
+          "passed": false,
+          "detail": "citations=0, need_terms=0, cross_source=False",
+          "citations": 0,
+          "guardrail_passed": true,
+          "latency_ms": 0,
+          "input_tokens": null,
+          "output_tokens": null
+        }
+      ],
+      "passes": 0,
+      "required_passes": 2,
+      "passed": false
+    }
+  ],
+  "latency_ms": {
+    "complex": [
+      2633
+    ],
+    "simple": [
+      50801
+    ],
+    "golden": [
+      2361,
+      14127,
+      41932,
+      2857,
+      11882,
+      42029,
+      2506,
+      11257,
+      2440,
+      38349,
+      3613,
+      14754,
+      37208,
+      2163,
+      2346,
+      0,
+      0,
+      0
+    ]
+  },
+  "token_usage": {
+    "input_tokens": 36531,
+    "output_tokens": 11925
+  }
+}

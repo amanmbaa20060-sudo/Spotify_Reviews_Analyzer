@@ -1,0 +1,37 @@
+[
+  {
+    "text": "Discover weekly is stale and plays the same artists again and again.",
+    "rating": 2,
+    "sentiment": "negative",
+    "primary_theme": "rq2.repetition.stale",
+    "rq": "rq2"
+  },
+  {
+    "text": "I love Spotify for background listening while working from home.",
+    "rating": 5,
+    "sentiment": "positive",
+    "primary_theme": "rq3.intent.background",
+    "rq": "rq3"
+  },
+  {
+    "text": "Can't find new music anywhere in the app. Search and browse are confusing.",
+    "rating": 2,
+    "sentiment": "negative",
+    "primary_theme": "rq1.entry_points.clarity",
+    "rq": "rq1"
+  },
+  {
+    "text": "Recommendations feel irrelevant and never match my mood.",
+    "rating": 1,
+    "sentiment": "negative",
+    "primary_theme": "rq2.relevance.mismatch",
+    "rq": "rq2"
+  },
+  {
+    "text": "Premium is worth it but free tier ads are frustrating when I try to discover playlists.",
+    "rating": 3,
+    "sentiment": "neutral",
+    "primary_theme": "rq5.tier.free_vs_premium",
+    "rq": "rq5"
+  }
+]

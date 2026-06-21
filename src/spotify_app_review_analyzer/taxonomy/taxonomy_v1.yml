@@ -1,0 +1,131 @@
+version: "1.0"
+updated_at: "2026-06-17"
+
+# Taxonomy v1 aligned to research questions RQ1–RQ6.
+# IDs are stable and used in `analysis_results.themes`.
+
+research_questions:
+  rq1:
+    label: "Why do users struggle to discover new music?"
+  rq2:
+    label: "Most common frustrations with recommendations"
+  rq3:
+    label: "Listening behaviors users try to achieve"
+  rq4:
+    label: "What causes repeated listening"
+  rq5:
+    label: "Which segments experience different challenges"
+  rq6:
+    label: "Consistent unmet needs"
+
+themes:
+  - id: "rq1.entry_points.clarity"
+    rq: "rq1"
+    label: "Discovery entry points are unclear"
+    description: "Users can’t find where to start discovering or which surfaces to trust."
+
+  - id: "rq1.overwhelm.choice_overload"
+    rq: "rq1"
+    label: "Choice overload / too many options"
+    description: "Discovery feels overwhelming; users revert to known content."
+
+  - id: "rq1.onboarding.discovery_features"
+    rq: "rq1"
+    label: "Poor onboarding to discovery features"
+    description: "Users don’t understand how to use discovery tools (radio, mixes, etc.)."
+
+  - id: "rq1.search.browse_friction"
+    rq: "rq1"
+    label: "Search/browse friction"
+    description: "Users struggle to browse genres/moods or find relevant categories."
+
+  - id: "rq2.relevance.mismatch"
+    rq: "rq2"
+    label: "Recommendations feel irrelevant"
+    description: "Suggested music does not match taste, context, or intent."
+
+  - id: "rq2.repetition.stale"
+    rq: "rq2"
+    label: "Recommendations are repetitive / stale"
+    description: "Users see the same artists/tracks repeatedly across surfaces."
+
+  - id: "rq2.diversity.genre_stagnation"
+    rq: "rq2"
+    label: "Genre stagnation / lack of diversity"
+    description: "Algorithm keeps user in a narrow genre lane."
+
+  - id: "rq2.control.lack_of_controls"
+    rq: "rq2"
+    label: "Lack of control over recommendations"
+    description: "Users want more ways to tune, reset, or steer the algorithm."
+
+  - id: "rq3.intent.background"
+    rq: "rq3"
+    label: "Background listening"
+    description: "Users want low-effort, reliable playback with minimal interaction."
+
+  - id: "rq3.intent.focus_workout"
+    rq: "rq3"
+    label: "Focus/workout mood management"
+    description: "Users want music for productivity, workouts, or specific moods."
+
+  - id: "rq3.intent.active_discovery"
+    rq: "rq3"
+    label: "Active discovery / novelty seeking"
+    description: "Users explicitly want new music and variety."
+
+  - id: "rq3.intent.artist_deep_dive"
+    rq: "rq3"
+    label: "Artist deep-dives"
+    description: "Users try to explore a specific artist’s catalog and related artists."
+
+  - id: "rq4.habit.comfort_listening"
+    rq: "rq4"
+    label: "Comfort listening is intentional"
+    description: "Users prefer familiar music; repetition is a feature, not a bug."
+
+  - id: "rq4.friction.defaulting_to_known"
+    rq: "rq4"
+    label: "Friction causes default to known content"
+    description: "Discovery feels too costly; users choose safe, saved playlists."
+
+  - id: "rq4.trust.algorithm_fatigue"
+    rq: "rq4"
+    label: "Algorithm fatigue / low trust"
+    description: "Users have learned not to trust recommendations due to misses."
+
+  - id: "rq4.risk.wasting_time"
+    rq: "rq4"
+    label: "Fear of wasting time on bad recs"
+    description: "Users avoid exploring because it often disappoints."
+
+  - id: "rq5.platform.android"
+    rq: "rq5"
+    label: "Android-specific experience issues"
+    description: "Challenges tied to Android UX, performance, or parity gaps."
+
+  - id: "rq5.platform.ios"
+    rq: "rq5"
+    label: "iOS-specific experience issues"
+    description: "Challenges tied to iOS UX, performance, or parity gaps."
+
+  - id: "rq5.tier.free_vs_premium"
+    rq: "rq5"
+    label: "Free vs Premium constraints"
+    description: "Discovery issues driven by ads, skips, shuffle constraints, or paywalls."
+
+  - id: "rq6.unmet.freshness"
+    rq: "rq6"
+    label: "Need: fresher discovery surfaces"
+    description: "Users want more novelty and faster rotation of recommendations."
+
+  - id: "rq6.unmet.transparency"
+    rq: "rq6"
+    label: "Need: transparency and explainability"
+    description: "Users want to understand why something was recommended."
+
+  - id: "rq6.unmet.effortless"
+    rq: "rq6"
+    label: "Need: effortless discovery"
+    description: "Users want discovery that doesn't require heavy setup or searching."
+

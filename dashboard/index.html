@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Spotify App Review Analyzer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/static/css/dashboard.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand">
+        <span class="brand-icon">♫</span>
+        <span class="brand-text">Spotify Engine</span>
+      </div>
+      <div class="profile-card">
+        <div class="avatar">RL</div>
+        <div>
+          <div class="profile-name">Research Lead</div>
+          <div class="profile-tier">PREMIUM TIER</div>
+        </div>
+      </div>
+      <button class="btn-primary sidebar-cta" id="btn-new-analysis">+ New Analysis</button>
+      <nav class="nav">
+        <button class="nav-item active" data-view="overview">Overview</button>
+        <button class="nav-item" data-view="sentiment">Sentiment</button>
+        <button class="nav-item" data-view="themes">Themes</button>
+        <button class="nav-item" data-view="research">Research</button>
+        <button class="nav-item" data-view="agent">Agent Chat</button>
+        <button class="nav-item" data-view="settings">Settings</button>
+      </nav>
+      <div class="sidebar-footer">
+        <a href="#">Help</a>
+        <a href="#">Logout</a>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <h1>Spotify App Review Analyzer</h1>
+        <div class="search-wrap">
+          <input type="search" id="global-search" placeholder="Search insights..." />
+        </div>
+        <div class="topbar-actions">
+          <button class="icon-btn" title="Notifications">🔔</button>
+          <button class="icon-btn" title="Settings">⚙</button>
+          <div class="avatar small">RL</div>
+        </div>
+      </header>
+
+      <div class="filters-bar">
+        <label>
+          Period
+          <select id="filter-days">
+            <option value="">All time</option>
+            <option value="7">Last 7 days</option>
+            <option value="30" selected>Last 30 days</option>
+            <option value="90">Last 90 days</option>
+          </select>
+        </label>
+        <label>
+          Source
+          <select id="filter-source">
+            <option value="">All sources</option>
+            <option value="app_store">App Store</option>
+            <option value="play_store">Play Store</option>
+            <option value="reddit">Reddit</option>
+            <option value="mastodon">Mastodon</option>
+          </select>
+        </label>
+        <button class="btn-secondary" id="btn-export-csv">Export CSV</button>
+        <button class="btn-secondary" id="btn-export-md">Export Report</button>
+      </div>
+
+      <!-- OVERVIEW -->
+      <section id="view-overview" class="view active">
+        <div class="kpi-grid">
+          <article class="kpi-card">
+            <div class="kpi-label">Play Store Rating</div>
+            <div class="kpi-value" id="kpi-play-store">—</div>
+            <div class="kpi-sub" id="kpi-play-count">— reviews</div>
+          </article>
+          <article class="kpi-card">
+            <div class="kpi-label">App Store Rating</div>
+            <div class="kpi-value" id="kpi-app-store">—</div>
+            <div class="kpi-sub" id="kpi-app-count">— reviews</div>
+          </article>
+          <article class="kpi-card">
+            <div class="kpi-label">Total Records</div>
+            <div class="kpi-value" id="kpi-total">—</div>
+            <div class="kpi-sub" id="kpi-processed">— analyzed</div>
+          </article>
+          <article class="kpi-card sentiment-card">
+            <div class="kpi-label">Sentiment Distribution</div>
+            <div class="sentiment-bar" id="sentiment-bar"></div>
+            <div class="sentiment-legend" id="sentiment-legend"></div>
+          </article>
+        </div>
+
+        <div class="rq-selector" id="rq-selector"></div>
+
+        <div class="rq-panel card">
+          <div class="rq-panel-header">
+            <span class="badge-active">Active Analysis</span>
+            <span class="rq-id" id="active-rq-id">RQ1</span>
+          </div>
+          <h2 id="active-rq-title">Why do users struggle to discover new music?</h2>
+          <div class="tag-row" id="active-rq-tags"></div>
+          <div class="rq-grid">
+            <div>
+              <h3>THE PROBLEM</h3>
+              <p id="active-rq-problem">Loading…</p>
+              <h3>PROPOSED SOLUTION</h3>
+              <ul id="active-rq-solutions"></ul>
+              <div class="citation-row" id="citation-ctas"></div>
+            </div>
+            <aside class="readiness-card">
+              <div class="readiness-label">Readiness Score</div>
+              <div class="readiness-score"><span id="readiness-score">—</span><span>/100</span></div>
+              <div class="readiness-meta" id="readiness-meta"></div>
+              <button class="btn-dark" id="btn-export-rq">Export Full Report ↗</button>
+            </aside>
+          </div>
+        </div>
+
+        <div class="bottom-grid">
+          <section class="card feedback-panel">
+            <div class="card-header">
+              <h3>Recent Feedback</h3>
+              <select id="feedback-source">
+                <option value="app_store">App Store</option>
+                <option value="play_store">Play Store</option>
+              </select>
+            </div>
+            <div id="feedback-list" class="feedback-list"></div>
+          </section>
+          <section class="card themes-panel">
+            <h3>Theme Frequency</h3>
+            <div id="theme-bars" class="theme-bars"></div>
+            <h3>Trending Keywords</h3>
+            <div id="word-cloud" class="word-cloud"></div>
+          </section>
+        </div>
+      </section>
+
+      <!-- SENTIMENT -->
+      <section id="view-sentiment" class="view">
+        <div class="card">
+          <h2>Sentiment by Source</h2>
+          <div id="sentiment-table" class="data-table"></div>
+        </div>
+        <div class="card chart-card">
+          <h2>Rating Distribution — App Store vs Play Store</h2>
+          <canvas id="ratings-chart" height="120"></canvas>
+        </div>
+      </section>
+
+      <!-- THEMES -->
+      <section id="view-themes" class="view">
+        <div class="card">
+          <h2>Top Themes</h2>
+          <div id="themes-full-list" class="theme-bars"></div>
+        </div>
+        <div class="card">
+          <h2>Unmet Needs (RQ6) — Frequency × Severity</h2>
+          <div id="unmet-needs-list"></div>
+        </div>
+      </section>
+
+      <!-- RESEARCH -->
+      <section id="view-research" class="view">
+        <h2>All Research Questions (RQ1–RQ6)</h2>
+        <div id="research-grid" class="research-grid"></div>
+      </section>
+
+      <!-- AGENT -->
+      <section id="view-agent" class="view">
+        <div class="card agent-card">
+          <h2>Ask a Research Question</h2>
+          <textarea id="agent-question" rows="3" placeholder="e.g. What are the most common frustrations with recommendations?"></textarea>
+          <div class="agent-actions">
+            <select id="agent-rq">
+              <option value="">Auto-detect RQ</option>
+              <option value="rq1">RQ1</option>
+              <option value="rq2">RQ2</option>
+              <option value="rq3">RQ3</option>
+              <option value="rq4">RQ4</option>
+              <option value="rq5">RQ5</option>
+              <option value="rq6">RQ6</option>
+            </select>
+            <button class="btn-primary" id="btn-ask-agent">Ask Agent</button>
+          </div>
+          <div id="agent-answer" class="agent-answer hidden"></div>
+        </div>
+      </section>
+
+      <!-- SETTINGS -->
+      <section id="view-settings" class="view">
+        <div class="card">
+          <h2>Settings</h2>
+          <p>API base: <code>/api</code></p>
+          <p>Design reference: <a href="/assets/design-reference.png" target="_blank">View mockup</a></p>
+        </div>
+      </section>
+
+      <footer class="footer">
+        <span>Spotify Insights Engine | © 2026 Research & Development</span>
+        <span>
+          <a href="#" id="footer-export-csv">Export CSV</a> ·
+          <a href="#" id="footer-export-md">Documentation</a>
+        </span>
+      </footer>
+    </main>
+  </div>
+
+  <div id="citation-drawer" class="drawer hidden">
+    <div class="drawer-content">
+      <button class="drawer-close" id="drawer-close">×</button>
+      <h3>Citation Detail</h3>
+      <div id="drawer-body"></div>
+    </div>
+  </div>
+
+  <script src="/static/js/dashboard.js"></script>
+</body>
+</html>
