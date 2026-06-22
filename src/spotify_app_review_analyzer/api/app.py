@@ -5,7 +5,7 @@ from pathlib import Path
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, Response
 from fastapi.staticfiles import StaticFiles
 
 from spotify_app_review_analyzer.api.routes.dashboard import router as dashboard_router
@@ -42,8 +42,12 @@ def health() -> dict[str, str]:
 
 
 @app.get("/")
-def dashboard_index() -> FileResponse:
+def dashboard_index() -> Response:
     index = DASHBOARD_DIR / "index.html"
     if not index.exists():
-        return FileResponse(__file__)  # fallback shouldn't happen
-    return FileResponse(index)
+        return FileResponse(__file__)
+    return Response(
+        content=index.read_text(encoding="utf-8"),
+        media_type="text/html",
+        headers={"Cache-Control": "no-store, no-cache, must-revalidate"},
+    )

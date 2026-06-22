@@ -7,7 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="/static/css/dashboard.css" />
+  <link rel="stylesheet" href="/static/css/dashboard.css?v=5" />
 </head>
 <body>
   <div class="app-shell">
@@ -112,16 +112,25 @@
           <div class="rq-grid">
             <div>
               <h3>THE PROBLEM</h3>
-              <p id="active-rq-problem">Loading…</p>
+              <p id="active-rq-problem" class="rq-problem-summary">Loading…</p>
+              <h3>ROOT CAUSES — WEIGHTED FACTORS</h3>
+              <div id="active-rq-factors" class="rq-factor-list"></div>
+              <div id="active-rq-segments" class="rq-segment-factors hidden"></div>
               <h3>PROPOSED SOLUTION</h3>
               <ul id="active-rq-solutions"></ul>
-              <div class="citation-row" id="citation-ctas"></div>
             </div>
-            <aside class="readiness-card">
+            <aside class="rq-sidebar">
+              <div class="rq-evidence">
+                <h3>Key Evidence — Negative Problem Reviews</h3>
+                <p class="rq-evidence-sub">Top negative reviews tied to problem themes for this RQ</p>
+                <div id="rq-evidence-list" class="rq-evidence-list"></div>
+              </div>
+              <div class="readiness-card">
               <div class="readiness-label">Readiness Score</div>
               <div class="readiness-score"><span id="readiness-score">—</span><span>/100</span></div>
               <div class="readiness-meta" id="readiness-meta"></div>
               <button class="btn-dark" id="btn-export-rq">Export Full Report ↗</button>
+              </div>
             </aside>
           </div>
         </div>
@@ -224,6 +233,6 @@
     </div>
   </div>
 
-  <script src="/static/js/dashboard.js"></script>
+  <script src="/static/js/dashboard.js?v=5"></script>
 </body>
 </html>

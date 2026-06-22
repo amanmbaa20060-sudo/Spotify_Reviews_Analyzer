@@ -53,11 +53,43 @@ def test_research_questions() -> None:
     assert len(items) == 6
 
 
+def test_rq_problem_analysis_endpoint() -> None:
+    res = client.get("/api/research-questions/rq1/problem-analysis")
+    assert res.status_code == 200
+    data = res.json()
+    pa = data["problem_analysis"]
+    assert pa["root_causes"]
+    assert abs(sum(c["weight"] for c in pa["root_causes"]) - 100.0) < 1.0
+    assert data["problem_summary"]
+
+
+def test_rq_top_evidence_endpoint() -> None:
+    res = client.get("/api/research-questions/rq1/top-evidence")
+    assert res.status_code == 200
+    data = res.json()
+    assert data["rq_id"] == "rq1"
+    assert data["total"] > 0
+    assert all(item["sentiment"] == "negative" for item in data["items"])
+
+
 def test_research_question_rq2() -> None:
     res = client.get("/api/research-questions/rq2")
     assert res.status_code == 200
-    assert res.json()["rq_id"] == "rq2"
-    assert res.json()["exemplar_citations"]
+    data = res.json()
+    assert data["rq_id"] == "rq2"
+    assert data["exemplar_citations"]
+    assert "top_evidence" in data
+    assert "problem_analysis" in data
+    pa = data["problem_analysis"]
+    assert pa["root_causes"]
+    assert abs(sum(c["weight"] for c in pa["root_causes"]) - 100.0) < 1.0
+    assert len(data["top_evidence"]) <= 5
+    if data["top_evidence"]:
+        item = data["top_evidence"][0]
+        assert "snippet" in item
+        assert "theme_label" in item
+        assert item["sentiment"] == "negative"
+        assert all(e["sentiment"] == "negative" for e in data["top_evidence"])
 
 
 def test_aggregates_sentiment() -> None:

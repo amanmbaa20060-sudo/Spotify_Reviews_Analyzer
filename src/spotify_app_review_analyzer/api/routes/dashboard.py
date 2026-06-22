@@ -10,6 +10,8 @@ from spotify_app_review_analyzer.api.services.dashboard_data import (
     get_rating_distribution,
     get_research_question,
     get_research_questions,
+    get_rq_negative_evidence,
+    get_rq_problem_analysis,
     get_recent_feedback,
     get_reviews,
     get_sentiment_by_source,
@@ -18,6 +20,7 @@ from spotify_app_review_analyzer.api.services.dashboard_data import (
     get_word_cloud_data,
 )
 from spotify_app_review_analyzer.api.deps import get_db
+from spotify_app_review_analyzer.analytics.schemas import RQ_IDS
 
 router = APIRouter(prefix="/api", tags=["dashboard"])
 
@@ -103,6 +106,22 @@ def aggregates_ratings(
 @router.get("/research-questions")
 def research_questions(session: Session = Depends(get_db)) -> dict:
     return {"items": get_research_questions(session)}
+
+
+@router.get("/research-questions/{rq_id}/problem-analysis")
+def rq_problem_analysis(rq_id: str, session: Session = Depends(get_db)) -> dict:
+    if rq_id not in RQ_IDS:
+        raise HTTPException(status_code=404, detail=f"Unknown research question: {rq_id}")
+    analysis = get_rq_problem_analysis(session, rq_id)
+    return {"rq_id": rq_id, "problem_analysis": analysis, "problem_summary": analysis["summary"]}
+
+
+@router.get("/research-questions/{rq_id}/top-evidence")
+def rq_top_evidence(rq_id: str, session: Session = Depends(get_db)) -> dict:
+    if rq_id not in RQ_IDS:
+        raise HTTPException(status_code=404, detail=f"Unknown research question: {rq_id}")
+    items = get_rq_negative_evidence(session, rq_id)
+    return {"rq_id": rq_id, "items": items, "total": len(items)}
 
 
 @router.get("/research-questions/{rq_id}")

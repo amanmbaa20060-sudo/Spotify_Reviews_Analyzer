@@ -46,6 +46,12 @@ function renderOverview(data) {
   });
 }
 
+function sourceLabel(key) {
+  if (key === "app_store") return "iOS";
+  if (key === "play_store") return "Android";
+  return key;
+}
+
 function renderRqTabs() {
   const el = qs("rq-selector");
   el.innerHTML = researchData.map((rq) =>
@@ -60,38 +66,152 @@ function renderRqTabs() {
   });
 }
 
-function renderActiveRq() {
+function renderRqEvidenceList(evidence) {
+  const evidenceEl = qs("rq-evidence-list");
+  if (!evidenceEl) return;
+  if (!evidence.length) {
+    evidenceEl.innerHTML = "<p class='rq-evidence-empty'>No negative problem reviews found for this RQ yet.</p>";
+    return;
+  }
+  evidenceEl.innerHTML = evidence.map((item, idx) => `
+    <article class="rq-evidence-item" data-idx="${idx}" tabindex="0" role="button">
+      <div class="rq-evidence-meta">
+        <span class="rq-evidence-rank">#${idx + 1}</span>
+        <strong>${sourceLabel(item.source_key)}</strong>
+        <span class="pill negative">NEGATIVE</span>
+        <span class="stars">${stars(item.rating)}</span>
+      </div>
+      <p class="rq-evidence-theme">${escapeHtml(item.theme_label || item.theme_id || "")}</p>
+      <blockquote>${escapeHtml(item.snippet)}</blockquote>
+    </article>
+  `).join("");
+  evidenceEl.querySelectorAll(".rq-evidence-item").forEach((card) => {
+    const idx = Number(card.dataset.idx);
+    const open = () => openCitation(evidence[idx]);
+    card.addEventListener("click", open);
+    card.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        open();
+      }
+    });
+  });
+}
+
+async function loadRqEvidence() {
+  const evidenceEl = qs("rq-evidence-list");
+  if (!evidenceEl) return;
+  evidenceEl.innerHTML = "<p class='rq-evidence-empty'>Loading negative reviews…</p>";
+  try {
+    const data = await fetchJson(`/research-questions/${activeRq}/top-evidence`);
+    renderRqEvidenceList(data.items || []);
+  } catch (e) {
+    evidenceEl.innerHTML = `<p class='rq-evidence-empty'>Could not load evidence. ${escapeHtml(String(e.message))}</p>`;
+  }
+}
+
+function renderRqFactors(analysis) {
+  const factorsEl = qs("active-rq-factors");
+  const segmentsEl = qs("active-rq-segments");
+  if (!factorsEl) return;
+
+  const causes = analysis?.root_causes || [];
+  if (!causes.length) {
+    factorsEl.innerHTML = "<p class='rq-evidence-empty'>No weighted factors available.</p>";
+    segmentsEl?.classList.add("hidden");
+    return;
+  }
+
+  factorsEl.innerHTML = causes.map((factor) => `
+    <article class="rq-factor-item">
+      <div class="rq-factor-header">
+        <span class="rq-factor-label">${escapeHtml(factor.label)}</span>
+        <span class="rq-factor-weight">${factor.weight}%</span>
+      </div>
+      <div class="rq-factor-bar-track">
+        <div class="rq-factor-bar-fill" style="width:${Math.min(factor.weight, 100)}%"></div>
+      </div>
+      <p class="rq-factor-desc">${escapeHtml(factor.description)}</p>
+      <div class="rq-factor-meta">
+        <span>${factor.mention_count} mentions</span>
+        <span>${factor.negative_share}% negative</span>
+        ${factor.top_sources ? Object.entries(factor.top_sources).slice(0, 2).map(([k, v]) =>
+          `<span>${sourceLabel(k)} ${v}%</span>`).join("") : ""}
+      </div>
+    </article>
+  `).join("");
+
+  const segments = analysis?.segment_factors || [];
+  if (segmentsEl) {
+    if (!segments.length) {
+      segmentsEl.classList.add("hidden");
+      segmentsEl.innerHTML = "";
+    } else {
+      segmentsEl.classList.remove("hidden");
+      segmentsEl.innerHTML = `
+        <h3>SEGMENT SIGNALS</h3>
+        <ul class="rq-segment-list">${segments.map((s) =>
+          `<li><strong>${s.weight}%</strong> — ${escapeHtml(s.label)}</li>`).join("")}</ul>`;
+    }
+  }
+}
+
+async function loadRqProblemAnalysis() {
+  const summaryEl = qs("active-rq-problem");
+  const factorsEl = qs("active-rq-factors");
+  if (!summaryEl || !factorsEl) return;
+  summaryEl.textContent = "Loading problem analysis…";
+  factorsEl.innerHTML = "";
+  try {
+    const data = await fetchJson(`/research-questions/${activeRq}/problem-analysis`);
+    const analysis = data.problem_analysis || {};
+    summaryEl.textContent = data.problem_summary || analysis.summary || "";
+    renderRqFactors(analysis);
+    const rq = researchData.find((r) => r.rq_id === activeRq);
+    if (rq) {
+      rq.problem_analysis = analysis;
+      rq.problem_summary = summaryEl.textContent;
+    }
+  } catch (e) {
+    summaryEl.textContent = "Could not load problem analysis.";
+    factorsEl.innerHTML = `<p class='rq-evidence-empty'>${escapeHtml(String(e.message))}</p>`;
+  }
+}
+
+async function renderActiveRq() {
   const rq = researchData.find((r) => r.rq_id === activeRq);
   if (!rq) return;
   qs("active-rq-id").textContent = rq.rq_id.toUpperCase();
   qs("active-rq-title").textContent = rq.label;
-  qs("active-rq-problem").textContent = rq.problem_summary;
   qs("active-rq-tags").innerHTML = (rq.tags || []).map((t) => `<span class="tag">${t}</span>`).join("");
   qs("active-rq-solutions").innerHTML = (rq.proposed_solutions || []).map((s) => `<li>${s}</li>`).join("");
   qs("readiness-score").textContent = rq.readiness_score ?? "—";
   qs("readiness-meta").innerHTML = `
     <div>Reviews: <strong>${rq.review_count}</strong></div>
     <div>Readiness: <strong>${rq.readiness}</strong></div>
-    <div>Citations: <strong>${(rq.exemplar_citations || []).length}</strong></div>
+    <div>Evidence: <strong>…</strong> reviews</div>
   `;
-  const cites = rq.exemplar_citations || [];
-  qs("citation-ctas").innerHTML = cites.slice(0, 5).map((c, i) =>
-    `<button class="citation-cta" data-idx="${i}">View citation ${i + 1}</button>`
-  ).join("");
-  qs("citation-ctas").querySelectorAll(".citation-cta").forEach((btn) => {
-    btn.addEventListener("click", () => openCitation(cites[Number(btn.dataset.idx)]));
-  });
+  await Promise.all([loadRqProblemAnalysis(), loadRqEvidence()]);
+  const rqAgain = researchData.find((r) => r.rq_id === activeRq);
+  if (!rqAgain) return;
+  const count = (qs("rq-evidence-list")?.querySelectorAll(".rq-evidence-item").length) || 0;
+  qs("readiness-meta").innerHTML = `
+    <div>Reviews: <strong>${rqAgain.review_count}</strong></div>
+    <div>Readiness: <strong>${rqAgain.readiness}</strong></div>
+    <div>Evidence: <strong>${count}</strong> negative reviews</div>
+  `;
 }
 
 function openCitation(c) {
   if (!c) return;
   qs("drawer-body").innerHTML = `
     <p><strong>Review ID:</strong> <code>${c.review_id}</code></p>
-    <p><strong>Source:</strong> ${c.source_key}</p>
+    <p><strong>Source:</strong> ${sourceLabel(c.source_key)}</p>
+    <p><strong>Rating:</strong> ${stars(c.rating)}</p>
     <p><strong>Sentiment:</strong> ${c.sentiment || "n/a"}</p>
-    <p><strong>Theme:</strong> ${c.theme_id}</p>
+    <p><strong>Theme:</strong> ${escapeHtml(c.theme_label || c.theme_id || "n/a")}</p>
     <p><strong>Confidence:</strong> ${c.confidence ?? "n/a"}</p>
-    <blockquote>${c.snippet}</blockquote>
+    <blockquote>${escapeHtml(c.snippet)}</blockquote>
   `;
   qs("citation-drawer").classList.remove("hidden");
 }
@@ -154,15 +274,21 @@ async function loadResearch() {
   researchData = data.items;
   renderRqTabs();
   renderActiveRq();
-  qs("research-grid").innerHTML = researchData.map((rq) => `
+  qs("research-grid").innerHTML = researchData.map((rq) => {
+    const topFactor = rq.problem_analysis?.root_causes?.[0];
+    const factorHint = topFactor
+      ? `<p class="research-factor-hint">Top driver: ${escapeHtml(topFactor.label)} (${topFactor.weight}%)</p>`
+      : "";
+    return `
     <article class="card research-card" data-rq="${rq.rq_id}">
       <div class="rq-panel-header"><span class="badge-active">${rq.readiness}</span><span>${rq.rq_id.toUpperCase()}</span></div>
       <h3>${rq.label}</h3>
-      <p>${rq.problem_summary}</p>
+      <p>${(rq.problem_summary || "").slice(0, 160)}${(rq.problem_summary || "").length > 160 ? "…" : ""}</p>
+      ${factorHint}
       <div class="tag-row">${(rq.tags || []).slice(0,3).map(t => `<span class="tag">${t}</span>`).join("")}</div>
       <p><strong>${rq.review_count}</strong> reviews · Score <strong>${rq.readiness_score}/100</strong></p>
-    </article>
-  `).join("");
+    </article>`;
+  }).join("");
   document.querySelectorAll(".research-card").forEach((card) => {
     card.addEventListener("click", () => {
       activeRq = card.dataset.rq;

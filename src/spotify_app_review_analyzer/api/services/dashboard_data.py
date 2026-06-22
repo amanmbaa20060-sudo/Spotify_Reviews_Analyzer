@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import uuid
 from collections import Counter, defaultdict
 from datetime import UTC, date, datetime, timedelta
 from typing import Any
@@ -8,9 +9,19 @@ from sqlalchemy import func, select
 from sqlalchemy.orm import Session, joinedload
 
 from spotify_app_review_analyzer.analytics.briefing import build_rq_briefing
+from spotify_app_review_analyzer.analytics.evidence import select_negative_problem_evidence
+from spotify_app_review_analyzer.analytics.aggregations import (
+    count_themes,
+    fetch_analyzed_reviews,
+    filter_reviews_for_rq,
+    theme_label_map,
+)
+from spotify_app_review_analyzer.analytics.problem_analysis import build_weighted_problem_analysis
 from spotify_app_review_analyzer.analytics.schemas import RQ_IDS
+from spotify_app_review_analyzer.core.settings import settings
 from spotify_app_review_analyzer.db.models import AnalysisResult, Review, Source
 from spotify_app_review_analyzer.processing.classifier.rule_based import RuleBasedClassifier
+from spotify_app_review_analyzer.processing.embeddings import EmbeddingStore
 from spotify_app_review_analyzer.taxonomy.loader import load_taxonomy
 
 _feedback_classifier: RuleBasedClassifier | None = None
@@ -264,13 +275,72 @@ def get_recent_feedback(
     return items, total
 
 
+def _embedding_store() -> EmbeddingStore | None:
+    store = EmbeddingStore()
+    if store.review_ids and not store.matrix:
+        store._load()
+    return store if store.review_ids else None
+
+
+def get_rq_negative_evidence(
+    session: Session,
+    rq_id: str,
+    *,
+    top_theme_ids: list[str] | None = None,
+    analyzed_reviews: list | None = None,
+    embedding_store: EmbeddingStore | None = None,
+    limit: int = 5,
+) -> list[dict[str, Any]]:
+    """Negative reviews mapped to top problem themes for an RQ."""
+    analyzed = analyzed_reviews or fetch_analyzed_reviews(session)
+    if top_theme_ids is None:
+        rq_reviews = filter_reviews_for_rq(analyzed, rq_id)
+        top_theme_ids = [
+            theme_id
+            for theme_id, _ in count_themes(rq_reviews, rq_id).most_common(
+                settings.rq_briefing_top_themes
+            )
+        ]
+    if not top_theme_ids:
+        return []
+
+    store = embedding_store if embedding_store is not None else _embedding_store()
+    citations = select_negative_problem_evidence(
+        rq_id,
+        analyzed,
+        top_theme_ids,
+        limit=limit,
+        embedding_store=store,
+    )
+    if not citations:
+        return []
+
+    labels = theme_label_map(load_taxonomy())
+    review_ids = [uuid.UUID(c.review_id) for c in citations]
+    ratings = dict(
+        session.execute(select(Review.id, Review.rating).where(Review.id.in_(review_ids))).all()
+    )
+    return [
+        {
+            **citation.to_dict(),
+            "theme_label": labels.get(citation.theme_id, citation.theme_id),
+            "rating": ratings.get(uuid.UUID(citation.review_id)),
+        }
+        for citation in citations
+    ]
+
+
 def get_research_questions(session: Session) -> list[dict]:
     briefing = build_rq_briefing(session)
+    analyzed_reviews = fetch_analyzed_reviews(session)
+    store = _embedding_store()
     taxonomy = load_taxonomy()
     solutions = _rq_solutions()
     output: list[dict] = []
     for section in briefing.sections:
         rq_id = section.rq_id
+        rq_reviews = filter_reviews_for_rq(analyzed_reviews, rq_id)
+        problem_analysis = build_weighted_problem_analysis(section, rq_reviews)
         output.append(
             {
                 "rq_id": rq_id,
@@ -284,12 +354,37 @@ def get_research_questions(session: Session) -> list[dict]:
                 "segment_signals": [s.to_dict() for s in section.segment_signals],
                 "cross_source_themes": section.cross_source_themes,
                 "exemplar_citations": [e.to_dict() for e in section.exemplar_citations],
-                "problem_summary": _problem_summary(section),
+                "top_evidence": get_rq_negative_evidence(
+                    session,
+                    rq_id,
+                    top_theme_ids=[theme.theme_id for theme in section.top_themes],
+                    analyzed_reviews=analyzed_reviews,
+                    embedding_store=store,
+                ),
+                "problem_summary": problem_analysis["summary"],
+                "problem_analysis": problem_analysis,
                 "proposed_solutions": solutions.get(rq_id, []),
                 "tags": _rq_tags(section),
             }
         )
     return output
+
+
+def get_rq_problem_analysis(session: Session, rq_id: str) -> dict[str, Any]:
+    """Weighted problem breakdown for a single RQ (dashboard on-demand load)."""
+    briefing = build_rq_briefing(session, rq_ids=[rq_id])
+    if not briefing.sections:
+        return {
+            "summary": "Unknown research question.",
+            "root_causes": [],
+            "segment_factors": [],
+            "negative_share": 0.0,
+            "review_count": 0,
+            "cross_source_themes": 0,
+        }
+    section = briefing.sections[0]
+    rq_reviews = filter_reviews_for_rq(fetch_analyzed_reviews(session), rq_id)
+    return build_weighted_problem_analysis(section, rq_reviews)
 
 
 def get_research_question(session: Session, rq_id: str) -> dict | None:
@@ -340,17 +435,6 @@ def _readiness_score(review_count: int, avg_confidence: float | None) -> int:
     base = min(review_count / 2, 50)
     conf = (avg_confidence or 0.5) * 50
     return min(100, int(base + conf))
-
-
-def _problem_summary(section) -> str:
-    if not section.top_themes:
-        return "Insufficient evidence for a consolidated problem statement."
-    top = section.top_themes[0]
-    return (
-        f"Users most frequently report '{top.label}' ({top.count} mentions). "
-        f"Evidence spans {len(section.cross_source_themes)} cross-source themes with "
-        f"{section.review_count} relevant reviews."
-    )
 
 
 def _rq_tags(section) -> list[str]:

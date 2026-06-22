@@ -127,3 +127,27 @@ def select_exemplars_for_rq(
             )
         )
     return citations
+
+
+def select_negative_problem_evidence(
+    rq_id: str,
+    reviews: list[AnalyzedReview],
+    top_theme_ids: list[str],
+    *,
+    limit: int = 5,
+    embedding_store: EmbeddingStore | None = None,
+) -> list[ExemplarCitation]:
+    """Negative reviews tied to top problem themes for an RQ (dashboard Key Evidence)."""
+    negative_reviews = [review for review in reviews if review.sentiment == "negative"]
+    if not negative_reviews or not top_theme_ids:
+        return []
+
+    per_theme = max(1, (limit + len(top_theme_ids) - 1) // len(top_theme_ids))
+    citations = select_exemplars_for_rq(
+        rq_id,
+        negative_reviews,
+        top_theme_ids,
+        per_theme=per_theme,
+        embedding_store=embedding_store,
+    )
+    return [citation for citation in citations if citation.sentiment == "negative"][:limit]
