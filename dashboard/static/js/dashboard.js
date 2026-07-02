@@ -1,4 +1,4 @@
-const API = "/api";
+const API = (window.APP_CONFIG?.apiBase || "/api").replace(/\/$/, "");
 let researchData = [];
 let activeRq = "rq1";
 
@@ -375,8 +375,8 @@ function setupNav() {
 }
 
 function setupExports() {
-  const csv = () => { window.open(`/api/export/csv?${sinceParam()}`, "_blank"); };
-  const md = () => { window.open("/api/export/markdown", "_blank"); };
+  const csv = () => { window.open(`${API}/export/csv?${sinceParam()}`, "_blank"); };
+  const md = () => { window.open(`${API}/export/markdown`, "_blank"); };
   qs("btn-export-csv")?.addEventListener("click", csv);
   qs("btn-export-md")?.addEventListener("click", md);
   qs("footer-export-csv")?.addEventListener("click", (e) => { e.preventDefault(); csv(); });
@@ -417,8 +417,14 @@ qs("citation-drawer")?.addEventListener("click", (e) => {
   if (e.target.id === "citation-drawer") qs("citation-drawer").classList.add("hidden");
 });
 
+function setupSettings() {
+  const el = qs("settings-api-base");
+  if (el) el.textContent = API;
+}
+
 setupNav();
 setupExports();
 setupAgent();
 setupFilters();
+setupSettings();
 refreshAll().catch((e) => console.error(e));
