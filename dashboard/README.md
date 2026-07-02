@@ -16,23 +16,23 @@ The dashboard uses `/api` on the same origin when served by FastAPI.
 
 ## Deploy frontend on Vercel
 
-The API runs on Render. Vercel serves the static `dashboard/` and proxies `/api/*` to Render via `api/[...path].js`.
+The API runs on Render. Vercel serves the static `dashboard/` and proxies `/api/*` via root `middleware.js`.
+
+**Important:** In Vercel project settings, **Root Directory must be the repo root** (leave blank). Do not set it to `dashboard` — that would skip `middleware.js` and all `/api` routes will 404.
 
 1. Import the GitHub repo in [Vercel](https://vercel.com/new).
-2. Leave **Root Directory** as the repo root (default).
-3. Add an environment variable (required for the API proxy):
+2. Confirm **Root Directory** is empty / `.` (not `dashboard`).
+3. Add an environment variable:
 
 | Variable | Example | Required |
 |----------|---------|----------|
 | `API_BASE_URL` | `https://spotify-review-analyzer-api.onrender.com` | Yes |
 
-No trailing slash. The frontend always calls same-origin `/api`; the Vercel serverless proxy forwards to Render.
+No trailing slash.
 
 4. Deploy, then verify:
-   - `https://<your-vercel-app>.vercel.app/api/health-proxy` → `backend_configured: true`
+   - `https://<your-vercel-app>.vercel.app/api/health-proxy` → `{"proxy":"ok","backend_configured":true}`
    - `https://<your-vercel-app>.vercel.app/api/overview` → JSON with KPIs
-
-5. If data is missing, **Redeploy** after saving env vars (build fails if `API_BASE_URL` is missing on Vercel).
 
 ## Structure
 

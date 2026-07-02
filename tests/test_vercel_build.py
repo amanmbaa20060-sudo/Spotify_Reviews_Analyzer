@@ -1,7 +1,5 @@
 import os
 
-import pytest
-
 from scripts.vercel_build import backend_url_configured
 
 
@@ -28,7 +26,7 @@ def test_vercel_build_writes_same_origin_config(tmp_path, monkeypatch) -> None:
     assert "apiBase: '/api'" in text
 
 
-def test_vercel_build_fails_without_backend_on_vercel(tmp_path, monkeypatch) -> None:
+def test_vercel_build_warns_without_backend_on_vercel(tmp_path, monkeypatch, capsys) -> None:
     import scripts.vercel_build as build
 
     config_path = tmp_path / "dashboard" / "static" / "js" / "config.js"
@@ -36,5 +34,5 @@ def test_vercel_build_fails_without_backend_on_vercel(tmp_path, monkeypatch) -> 
     monkeypatch.setenv("VERCEL", "1")
     monkeypatch.delenv("API_BASE_URL", raising=False)
     monkeypatch.delenv("RENDER_API_URL", raising=False)
-    with pytest.raises(SystemExit):
-        build.main()
+    build.main()
+    assert "WARNING" in capsys.readouterr().err

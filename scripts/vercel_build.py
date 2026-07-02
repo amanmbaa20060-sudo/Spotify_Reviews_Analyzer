@@ -21,15 +21,15 @@ def main() -> None:
         "window.APP_CONFIG = {\n  apiBase: '/api',\n};\n",
         encoding="utf-8",
     )
-    print(f"Wrote {CONFIG_PATH} with apiBase='/api' (Vercel proxy)")
+    print(f"Wrote {CONFIG_PATH} with apiBase='/api' (Vercel middleware proxy)")
 
     if os.getenv("VERCEL") and not backend_url_configured():
         print(
-            "ERROR: API_BASE_URL is not set on Vercel. "
-            "Add it under Settings → Environment Variables, then redeploy.",
+            "WARNING: API_BASE_URL is not set on Vercel. "
+            "Add it under Settings → Environment Variables, then redeploy. "
+            "/api/health-proxy will report backend_configured=false until then.",
             file=sys.stderr,
         )
-        sys.exit(1)
 
 
 if __name__ == "__main__":
