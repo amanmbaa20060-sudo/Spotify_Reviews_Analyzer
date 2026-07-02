@@ -19,9 +19,12 @@ jobs:
       - name: Lint (ruff)
         run: |
           ruff check .
-      - name: Tests
+      - name: Prepare test database
         env:
-          DATABASE_URL: "sqlite:///:memory:"
+          AUTO_SEED_IF_EMPTY: "true"
+        run: |
+          python -c "from spotify_app_review_analyzer.db.init_db import init_database; init_database()"
+          python scripts/render_seed.py
+      - name: Tests
         run: |
           pytest -q
-
