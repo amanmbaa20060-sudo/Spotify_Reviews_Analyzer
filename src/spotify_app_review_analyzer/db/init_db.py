@@ -4,6 +4,7 @@ import logging
 from pathlib import Path
 
 from spotify_app_review_analyzer.core.settings import settings
+from spotify_app_review_analyzer.db import models  # noqa: F401
 from spotify_app_review_analyzer.db.base import Base
 from spotify_app_review_analyzer.db.session import get_engine
 
