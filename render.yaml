@@ -1,5 +1,5 @@
 # Render Blueprint — Spotify App Review Analyzer API + dashboard
-# Apply: https://dashboard.render.com/blueprint/new?repo=https://github.com/amanmbaa20060-sudo/SpotifyReviewsAnalyzerDashboard
+# Apply: https://dashboard.render.com/blueprint/new?repo=https://github.com/amanmbaa20060-sudo/Spotify_Reviews_Analyzer
 databases:
   - name: spotify-reviews-db
     plan: free

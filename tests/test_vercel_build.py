@@ -18,10 +18,21 @@ def test_vercel_build_writes_same_origin_config(tmp_path, monkeypatch) -> None:
     config_path = tmp_path / "dashboard" / "static" / "js" / "config.js"
     monkeypatch.setattr(build, "CONFIG_PATH", config_path)
     monkeypatch.delenv("VERCEL", raising=False)
-    monkeypatch.setenv("API_BASE_URL", "https://api.example.com")
+    monkeypatch.delenv("API_BASE_URL", raising=False)
     build.main()
     text = config_path.read_text(encoding="utf-8")
     assert "apiBase: '/api'" in text
+
+
+def test_vercel_build_writes_direct_render_url(tmp_path, monkeypatch) -> None:
+    import spotify_app_review_analyzer.deploy.vercel_build as build
+
+    config_path = tmp_path / "dashboard" / "static" / "js" / "config.js"
+    monkeypatch.setattr(build, "CONFIG_PATH", config_path)
+    monkeypatch.setenv("API_BASE_URL", "https://api.example.com")
+    build.main()
+    text = config_path.read_text(encoding="utf-8")
+    assert "https://api.example.com/api" in text
 
 
 def test_vercel_build_warns_without_backend_on_vercel(tmp_path, monkeypatch, capsys) -> None:

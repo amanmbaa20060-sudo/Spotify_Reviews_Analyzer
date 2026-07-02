@@ -13,6 +13,14 @@ def test_health() -> None:
     assert res.json()["status"] == "ok"
 
 
+def test_api_status() -> None:
+    res = client.get("/api/status")
+    assert res.status_code == 200
+    data = res.json()
+    assert data["status"] == "ok"
+    assert data["total_records"] > 0
+
+
 def test_dashboard_index() -> None:
     res = client.get("/")
     assert res.status_code == 200

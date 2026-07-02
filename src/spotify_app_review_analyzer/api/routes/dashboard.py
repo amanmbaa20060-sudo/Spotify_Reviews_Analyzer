@@ -21,6 +21,7 @@ from spotify_app_review_analyzer.api.services.dashboard_data import (
     get_unmet_needs,
     get_word_cloud_data,
 )
+from spotify_app_review_analyzer.core.settings import settings
 
 router = APIRouter(prefix="/api", tags=["dashboard"])
 
@@ -28,6 +29,19 @@ router = APIRouter(prefix="/api", tags=["dashboard"])
 class AgentQueryRequest(BaseModel):
     question: str = Field(..., min_length=3)
     rq_id: str | None = None
+
+
+@router.get("/status")
+def api_status(session: Session = Depends(get_db)) -> dict:
+    """Lightweight health + data counts for production debugging."""
+    overview = get_overview_kpis(session)
+    return {
+        "status": "ok",
+        "env": settings.app_env,
+        "database_url_scheme": settings.database_url.split(":", 1)[0],
+        "total_records": overview["total_records"],
+        "processed_records": overview["processed_records"],
+    }
 
 
 @router.get("/overview")

@@ -11,6 +11,7 @@ from sqlalchemy import func, select
 from spotify_app_review_analyzer.analytics.service import RQAnalysisService
 from spotify_app_review_analyzer.core.logging import configure_logging
 from spotify_app_review_analyzer.core.settings import settings
+from spotify_app_review_analyzer.db.init_db import init_database
 from spotify_app_review_analyzer.db.models import Review
 from spotify_app_review_analyzer.db.session import get_session
 from spotify_app_review_analyzer.ingestion.service import IngestService
@@ -75,6 +76,7 @@ def main() -> int:
 
     session = get_session()
     try:
+        init_database()
         existing = session.scalar(select(func.count()).select_from(Review)) or 0
         if existing > 0:
             logger.info("Database already has %s reviews; skipping seed.", existing)

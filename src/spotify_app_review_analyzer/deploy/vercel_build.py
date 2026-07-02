@@ -14,20 +14,28 @@ def backend_url_configured() -> bool:
     return bool((os.getenv("API_BASE_URL") or os.getenv("RENDER_API_URL") or "").strip())
 
 
+def resolve_api_base() -> str:
+    """Use direct Render URL when set (CORS-enabled); otherwise same-origin /api + middleware."""
+    raw = (os.getenv("API_BASE_URL") or os.getenv("RENDER_API_URL") or "").strip().rstrip("/")
+    if raw:
+        return f"{raw}/api"
+    return "/api"
+
+
 def main() -> None:
-    # Frontend always calls same-origin /api; middleware.js proxies to Render.
+    api_base = resolve_api_base()
     CONFIG_PATH.parent.mkdir(parents=True, exist_ok=True)
     CONFIG_PATH.write_text(
-        "window.APP_CONFIG = {\n  apiBase: '/api',\n};\n",
+        f"window.APP_CONFIG = {{\n  apiBase: {api_base!r},\n}};\n",
         encoding="utf-8",
     )
-    print(f"Wrote {CONFIG_PATH} with apiBase='/api' (Vercel middleware proxy)")
+    mode = "direct Render URL" if api_base.startswith("http") else "same-origin /api (middleware)"
+    print(f"Wrote {CONFIG_PATH} with apiBase={api_base!r} ({mode})")
 
     if os.getenv("VERCEL") and not backend_url_configured():
         print(
             "WARNING: API_BASE_URL is not set on Vercel. "
-            "Add it under Settings → Environment Variables, then redeploy. "
-            "/api/health-proxy will report backend_configured=false until then.",
+            "Add it under Settings → Environment Variables, then redeploy.",
             file=sys.stderr,
         )
 
