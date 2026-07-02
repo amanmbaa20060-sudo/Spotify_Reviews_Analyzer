@@ -1,6 +1,16 @@
 from __future__ import annotations
 
+from pydantic import field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
+
+
+def normalize_database_url(url: str) -> str:
+    """Render and other hosts often provide postgres:// URLs; SQLAlchemy needs +psycopg."""
+    if url.startswith("postgres://"):
+        return "postgresql+psycopg://" + url[len("postgres://") :]
+    if url.startswith("postgresql://") and "+psycopg" not in url:
+        return "postgresql+psycopg://" + url[len("postgresql://") :]
+    return url
 
 
 class Settings(BaseSettings):
@@ -11,6 +21,13 @@ class Settings(BaseSettings):
 
     # SQLite default works locally without Docker/Postgres (Windows-friendly).
     database_url: str = "sqlite:///data/spotify_reviews.db"
+
+    @field_validator("database_url", mode="before")
+    @classmethod
+    def _normalize_database_url(cls, value: object) -> object:
+        if isinstance(value, str):
+            return normalize_database_url(value)
+        return value
 
     # Ingestion
     spotify_app_store_id: str = "324684580"

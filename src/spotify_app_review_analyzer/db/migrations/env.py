@@ -7,7 +7,7 @@ from logging.config import fileConfig
 from alembic import context
 from sqlalchemy import engine_from_config, pool
 
-from spotify_app_review_analyzer.core.settings import settings
+from spotify_app_review_analyzer.core.settings import normalize_database_url, settings
 from spotify_app_review_analyzer.db import models  # noqa: F401
 from spotify_app_review_analyzer.db.base import Base
 
@@ -21,7 +21,8 @@ target_metadata = Base.metadata
 
 def get_url() -> str:
     # Prefer explicit DATABASE_URL (from .env) but allow Alembic config override.
-    return os.getenv("DATABASE_URL", settings.database_url)
+    raw = os.getenv("DATABASE_URL", settings.database_url)
+    return normalize_database_url(raw)
 
 
 def run_migrations_offline() -> None:
