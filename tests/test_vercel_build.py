@@ -1,5 +1,4 @@
-
-from scripts.vercel_build import backend_url_configured
+from spotify_app_review_analyzer.deploy.vercel_build import backend_url_configured
 
 
 def test_backend_url_configured_false(monkeypatch) -> None:
@@ -14,7 +13,7 @@ def test_backend_url_configured_true(monkeypatch) -> None:
 
 
 def test_vercel_build_writes_same_origin_config(tmp_path, monkeypatch) -> None:
-    import scripts.vercel_build as build
+    import spotify_app_review_analyzer.deploy.vercel_build as build
 
     config_path = tmp_path / "dashboard" / "static" / "js" / "config.js"
     monkeypatch.setattr(build, "CONFIG_PATH", config_path)
@@ -26,7 +25,7 @@ def test_vercel_build_writes_same_origin_config(tmp_path, monkeypatch) -> None:
 
 
 def test_vercel_build_warns_without_backend_on_vercel(tmp_path, monkeypatch, capsys) -> None:
-    import scripts.vercel_build as build
+    import spotify_app_review_analyzer.deploy.vercel_build as build
 
     config_path = tmp_path / "dashboard" / "static" / "js" / "config.js"
     monkeypatch.setattr(build, "CONFIG_PATH", config_path)
