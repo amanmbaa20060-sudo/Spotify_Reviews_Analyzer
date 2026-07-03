@@ -7,8 +7,8 @@ import logging
 from spotify_app_review_analyzer.core.logging import configure_logging
 from spotify_app_review_analyzer.core.settings import settings
 from spotify_app_review_analyzer.deploy.seed import (
-    RAW_DIR,
     auto_seed_enabled,
+    resolve_raw_dir,
     review_count,
     run_production_seed_if_empty,
 )
@@ -27,8 +27,8 @@ def main() -> int:
         logger.info("Database already has %s reviews; skipping seed.", review_count())
         return 0
 
-    if not RAW_DIR.exists():
-        logger.error("Missing snapshot directory: %s", RAW_DIR)
+    if not resolve_raw_dir().is_dir() or not any(resolve_raw_dir().glob("*.json")):
+        logger.error("Missing snapshot JSON files in %s", resolve_raw_dir())
         return 1
 
     if run_production_seed_if_empty():

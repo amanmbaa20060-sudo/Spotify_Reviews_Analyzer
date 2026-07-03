@@ -22,7 +22,12 @@ from spotify_app_review_analyzer.api.services.dashboard_data import (
     get_word_cloud_data,
 )
 from spotify_app_review_analyzer.core.settings import settings
-from spotify_app_review_analyzer.deploy.seed import is_seeding, seed_completed
+from spotify_app_review_analyzer.deploy.seed import (
+    is_seeding,
+    last_seed_error,
+    resolve_raw_dir,
+    seed_completed,
+)
 
 router = APIRouter(prefix="/api", tags=["dashboard"])
 
@@ -50,6 +55,8 @@ def api_status(session: Session = Depends(get_db)) -> dict:
         "processed_records": overview["processed_records"],
         "seeding_in_progress": is_seeding(),
         "seed_completed": seed_completed(),
+        "raw_data_dir": str(resolve_raw_dir()),
+        "last_seed_error": last_seed_error(),
         "warnings": warnings,
     }
 

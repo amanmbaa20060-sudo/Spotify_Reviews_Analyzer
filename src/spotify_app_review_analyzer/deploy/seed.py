@@ -20,19 +20,35 @@ from spotify_app_review_analyzer.processing.service import ProcessingService
 
 logger = logging.getLogger(__name__)
 
-PROJECT_ROOT = Path(__file__).resolve().parents[3]
-RAW_DIR = PROJECT_ROOT / "data" / "raw"
-
 _seed_lock = threading.Lock()
 _seeding = False
 _seed_complete = False
+_last_seed_error: str | None = None
+
+
+def resolve_raw_dir() -> Path:
+    """Locate committed JSON snapshots in dev and on Render after pip install."""
+    env_dir = os.getenv("RAW_DATA_DIR")
+    if env_dir:
+        return Path(env_dir)
+
+    for candidate in (Path.cwd(), *Path(__file__).resolve().parents):
+        raw_dir = candidate / "data" / "raw"
+        if raw_dir.is_dir() and any(raw_dir.glob("*.json")):
+            return raw_dir
+
+    return Path.cwd() / "data" / "raw"
 
 
 def auto_seed_enabled() -> bool:
     explicit = os.getenv("AUTO_SEED_IF_EMPTY")
-    if explicit is not None:
+    if explicit is not None and explicit.strip():
         return explicit.lower() in {"1", "true", "yes"}
     return os.getenv("RENDER") == "true"
+
+
+def last_seed_error() -> str | None:
+    return _last_seed_error
 
 
 def is_seeding() -> bool:
@@ -52,11 +68,12 @@ def review_count() -> int:
 
 
 def import_snapshots(session) -> int:
+    raw_dir = resolve_raw_dir()
     service = IngestService(session)
     service.ensure_sources(commit=True)
     inserted = 0
 
-    for path in sorted(RAW_DIR.glob("*.json")):
+    for path in sorted(raw_dir.glob("*.json")):
         reviews = load_snapshot(path)
         if not reviews:
             continue
@@ -95,7 +112,7 @@ def run_production_seed_if_empty() -> bool:
 
     Returns True if seeding ran, False if skipped.
     """
-    global _seeding, _seed_complete
+    global _seeding, _seed_complete, _last_seed_error
 
     if not auto_seed_enabled():
         logger.info("AUTO_SEED_IF_EMPTY is disabled; skipping seed.")
@@ -105,6 +122,7 @@ def run_production_seed_if_empty() -> bool:
         if _seed_complete:
             return False
 
+        raw_dir = resolve_raw_dir()
         session = get_session()
         try:
             init_database()
@@ -112,14 +130,17 @@ def run_production_seed_if_empty() -> bool:
             if existing > 0:
                 logger.info("Database already has %s reviews; skipping seed.", existing)
                 _seed_complete = True
+                _last_seed_error = None
                 return False
 
-            if not RAW_DIR.exists():
-                logger.error("Missing snapshot directory: %s", RAW_DIR)
+            if not raw_dir.is_dir() or not any(raw_dir.glob("*.json")):
+                _last_seed_error = f"Missing snapshot JSON files in {raw_dir}"
+                logger.error(_last_seed_error)
                 return False
 
             _seeding = True
-            logger.info("Seeding empty database from %s", RAW_DIR)
+            _last_seed_error = None
+            logger.info("Seeding empty database from %s", raw_dir)
             inserted = import_snapshots(session)
             logger.info("Imported %s new reviews from snapshots", inserted)
 
@@ -130,8 +151,9 @@ def run_production_seed_if_empty() -> bool:
             logger.info("RQ briefing built in database context (exports skipped).")
             _seed_complete = True
             return True
-        except Exception:
+        except Exception as exc:
             session.rollback()
+            _last_seed_error = str(exc)
             logger.exception("Production seed failed")
             return False
         finally:
@@ -151,5 +173,5 @@ def start_background_seed_if_empty() -> bool:
         run_production_seed_if_empty()
 
     threading.Thread(target=_run, name="production-seed", daemon=True).start()
-    logger.warning("Database is empty; background seed started from %s", RAW_DIR)
+    logger.warning("Database is empty; background seed started from %s", resolve_raw_dir())
     return True
