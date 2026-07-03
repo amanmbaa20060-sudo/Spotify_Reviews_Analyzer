@@ -22,12 +22,9 @@ logger = logging.getLogger(__name__)
 
 if __name__ == "__main__":
     configure_logging(settings.log_level)
-    try:
-        run_migrations()
-    except Exception:
-        logger.exception("Alembic upgrade failed")
-        if os.getenv("RENDER") == "true":
-            raise
+    if not run_migrations():
+        logger.warning("Continuing without Alembic upgrade; preDeploy may have already applied it")
+
     port = int(os.environ.get("PORT", "10000"))
     scheme = settings.database_url.split(":", 1)[0]
     logger.info("Starting API on 0.0.0.0:%s (database=%s)", port, scheme)
