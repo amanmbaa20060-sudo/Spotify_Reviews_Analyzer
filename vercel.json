@@ -2,6 +2,6 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "version": 2,
   "framework": null,
-  "buildCommand": "python scripts/vercel_build.py",
+  "buildCommand": "node scripts/vercel-build.mjs",
   "outputDirectory": "dashboard"
 }

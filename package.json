@@ -1,0 +1,8 @@
+{
+  "name": "spotify-reviews-dashboard",
+  "private": true,
+  "description": "Vercel static dashboard for Spotify App Review Analyzer",
+  "scripts": {
+    "build": "node scripts/vercel-build.mjs"
+  }
+}
