@@ -17,7 +17,7 @@ services:
     buildCommand: pip install --upgrade pip && pip install -r requirements.txt && pip install .
     startCommand: python scripts/start_render.py
     healthCheckPath: /health
-    preDeployCommand: alembic upgrade head && python scripts/render_seed.py
+    preDeployCommand: python -c "from spotify_app_review_analyzer.db.migrate import run_migrations; run_migrations()" && python scripts/render_seed.py
     envVars:
       - key: PYTHON_VERSION
         value: "3.11.9"

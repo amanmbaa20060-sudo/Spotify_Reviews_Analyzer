@@ -18,6 +18,7 @@ from sqlalchemy import (
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from spotify_app_review_analyzer.db.base import Base
+from spotify_app_review_analyzer.db.types import string_list
 
 
 class Source(Base):
@@ -79,10 +80,10 @@ class AnalysisResult(Base):
     sentiment: Mapped[str | None] = mapped_column(String(16))
     sentiment_score: Mapped[float | None] = mapped_column()
 
-    themes: Mapped[list[str]] = mapped_column(JSON, default=list)
-    research_questions: Mapped[list[str]] = mapped_column(JSON, default=list)
-    listening_intent: Mapped[list[str]] = mapped_column(JSON, default=list)
-    segment_tags: Mapped[list[str]] = mapped_column(JSON, default=list)
+    themes: Mapped[list[str]] = mapped_column(string_list(128), default=list)
+    research_questions: Mapped[list[str]] = mapped_column(string_list(16), default=list)
+    listening_intent: Mapped[list[str]] = mapped_column(string_list(64), default=list)
+    segment_tags: Mapped[list[str]] = mapped_column(string_list(64), default=list)
 
     confidence: Mapped[float | None] = mapped_column()
     model_version: Mapped[str | None] = mapped_column(String(64))
