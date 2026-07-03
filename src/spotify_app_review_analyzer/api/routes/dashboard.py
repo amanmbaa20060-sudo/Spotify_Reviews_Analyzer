@@ -22,6 +22,7 @@ from spotify_app_review_analyzer.api.services.dashboard_data import (
     get_word_cloud_data,
 )
 from spotify_app_review_analyzer.core.settings import settings
+from spotify_app_review_analyzer.deploy.seed import is_seeding, seed_completed
 
 router = APIRouter(prefix="/api", tags=["dashboard"])
 
@@ -35,12 +36,21 @@ class AgentQueryRequest(BaseModel):
 def api_status(session: Session = Depends(get_db)) -> dict:
     """Lightweight health + data counts for production debugging."""
     overview = get_overview_kpis(session)
+    scheme = settings.database_url.split(":", 1)[0]
+    warnings: list[str] = []
+    if settings.app_env == "production" and scheme == "sqlite":
+        warnings.append(
+            "DATABASE_URL is not set to Postgres; SQLite data is ephemeral on Render."
+        )
     return {
         "status": "ok",
         "env": settings.app_env,
-        "database_url_scheme": settings.database_url.split(":", 1)[0],
+        "database_url_scheme": scheme,
         "total_records": overview["total_records"],
         "processed_records": overview["processed_records"],
+        "seeding_in_progress": is_seeding(),
+        "seed_completed": seed_completed(),
+        "warnings": warnings,
     }
 
 

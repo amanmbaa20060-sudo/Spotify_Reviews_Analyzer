@@ -1,0 +1,155 @@
+"""Production bootstrap: import snapshots, process, and analyze when the DB is empty."""
+
+from __future__ import annotations
+
+import logging
+import os
+import threading
+from pathlib import Path
+
+from sqlalchemy import func, select
+
+from spotify_app_review_analyzer.analytics.service import RQAnalysisService
+from spotify_app_review_analyzer.core.settings import settings
+from spotify_app_review_analyzer.db.init_db import init_database
+from spotify_app_review_analyzer.db.models import Review
+from spotify_app_review_analyzer.db.session import get_session
+from spotify_app_review_analyzer.ingestion.service import IngestService
+from spotify_app_review_analyzer.ingestion.snapshot import SnapshotProvider, load_snapshot
+from spotify_app_review_analyzer.processing.service import ProcessingService
+
+logger = logging.getLogger(__name__)
+
+PROJECT_ROOT = Path(__file__).resolve().parents[3]
+RAW_DIR = PROJECT_ROOT / "data" / "raw"
+
+_seed_lock = threading.Lock()
+_seeding = False
+_seed_complete = False
+
+
+def auto_seed_enabled() -> bool:
+    explicit = os.getenv("AUTO_SEED_IF_EMPTY")
+    if explicit is not None:
+        return explicit.lower() in {"1", "true", "yes"}
+    return os.getenv("RENDER") == "true"
+
+
+def is_seeding() -> bool:
+    return _seeding
+
+
+def seed_completed() -> bool:
+    return _seed_complete
+
+
+def review_count() -> int:
+    session = get_session()
+    try:
+        return session.scalar(select(func.count()).select_from(Review)) or 0
+    finally:
+        session.close()
+
+
+def import_snapshots(session) -> int:
+    service = IngestService(session)
+    service.ensure_sources(commit=True)
+    inserted = 0
+
+    for path in sorted(RAW_DIR.glob("*.json")):
+        reviews = load_snapshot(path)
+        if not reviews:
+            continue
+        source_key = reviews[0].source_key
+        metrics = service.ingest_provider(
+            SnapshotProvider(source_key, reviews),
+            dry_run=False,
+            export_json=False,
+        )
+        inserted += metrics.inserted
+        logger.info(
+            "Snapshot %s: fetched=%s inserted=%s skipped=%s",
+            path.name,
+            metrics.fetched,
+            metrics.inserted,
+            metrics.skipped,
+        )
+
+    session.commit()
+    return inserted
+
+
+def process_all(session) -> None:
+    service = ProcessingService(session)
+    while True:
+        metrics = service.process_batch(batch_size=settings.processing_batch_size, force=False)
+        if metrics.fetched == 0:
+            break
+    embedded = service.rebuild_all_embeddings()
+    session.commit()
+    logger.info("Processing complete; rebuilt embeddings for %s reviews", embedded)
+
+
+def run_production_seed_if_empty() -> bool:
+    """Seed from committed JSON snapshots when the database has no reviews.
+
+    Returns True if seeding ran, False if skipped.
+    """
+    global _seeding, _seed_complete
+
+    if not auto_seed_enabled():
+        logger.info("AUTO_SEED_IF_EMPTY is disabled; skipping seed.")
+        return False
+
+    with _seed_lock:
+        if _seed_complete:
+            return False
+
+        session = get_session()
+        try:
+            init_database()
+            existing = session.scalar(select(func.count()).select_from(Review)) or 0
+            if existing > 0:
+                logger.info("Database already has %s reviews; skipping seed.", existing)
+                _seed_complete = True
+                return False
+
+            if not RAW_DIR.exists():
+                logger.error("Missing snapshot directory: %s", RAW_DIR)
+                return False
+
+            _seeding = True
+            logger.info("Seeding empty database from %s", RAW_DIR)
+            inserted = import_snapshots(session)
+            logger.info("Imported %s new reviews from snapshots", inserted)
+
+            process_all(session)
+
+            RQAnalysisService(session).run(export=False)
+            session.commit()
+            logger.info("RQ briefing built in database context (exports skipped).")
+            _seed_complete = True
+            return True
+        except Exception:
+            session.rollback()
+            logger.exception("Production seed failed")
+            return False
+        finally:
+            _seeding = False
+            session.close()
+
+
+def start_background_seed_if_empty() -> bool:
+    """Kick off seeding in a daemon thread when the DB is empty."""
+    if not auto_seed_enabled() or _seed_complete or _seeding:
+        return False
+
+    if review_count() > 0:
+        return False
+
+    def _run() -> None:
+        run_production_seed_if_empty()
+
+    threading.Thread(target=_run, name="production-seed", daemon=True).start()
+    logger.warning("Database is empty; background seed started from %s", RAW_DIR)
+    return True

@@ -2,6 +2,8 @@
 from __future__ import annotations
 
 import logging
+import os
+import threading
 from contextlib import asynccontextmanager
 from pathlib import Path
 
@@ -14,7 +16,14 @@ from spotify_app_review_analyzer.api.routes.dashboard import router as dashboard
 from spotify_app_review_analyzer.api.routes.export import router as export_router
 from spotify_app_review_analyzer.core.logging import configure_logging
 from spotify_app_review_analyzer.core.settings import settings
+from spotify_app_review_analyzer.db.init_db import init_database
 from spotify_app_review_analyzer.db.session import get_session
+from spotify_app_review_analyzer.deploy.seed import (
+    auto_seed_enabled,
+    review_count,
+    run_production_seed_if_empty,
+    start_background_seed_if_empty,
+)
 from spotify_app_review_analyzer.processing.embeddings import EmbeddingStore
 from spotify_app_review_analyzer.processing.service import ProcessingService
 
@@ -43,9 +52,38 @@ def _ensure_embedding_index() -> None:
         session.close()
 
 
+def _warn_if_ephemeral_sqlite_on_render() -> None:
+    if os.getenv("RENDER") != "true":
+        return
+    if settings.database_url.startswith("sqlite:"):
+        logger.warning(
+            "Render is using SQLite (%s). Data is lost on redeploy/spin-down. "
+            "Attach a Render Postgres database and set DATABASE_URL.",
+            settings.database_url,
+        )
+
+
+def _bootstrap_data() -> None:
+    try:
+        if run_production_seed_if_empty():
+            _ensure_embedding_index()
+    except Exception:
+        logger.exception("Background production seed failed")
+
+
 @asynccontextmanager
 async def lifespan(_app: FastAPI):
-    _ensure_embedding_index()
+    _warn_if_ephemeral_sqlite_on_render()
+    init_database()
+
+    if auto_seed_enabled() and review_count() == 0:
+        if os.getenv("RENDER") == "true":
+            start_background_seed_if_empty()
+        else:
+            threading.Thread(target=_bootstrap_data, name="production-seed", daemon=True).start()
+    else:
+        _ensure_embedding_index()
+
     yield
 
 
