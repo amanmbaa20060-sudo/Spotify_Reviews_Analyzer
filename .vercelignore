@@ -12,4 +12,5 @@ tests/
 alembic.ini
 docker-compose.yml
 render.yaml
+deploy/render.yaml
 requirements.txt
