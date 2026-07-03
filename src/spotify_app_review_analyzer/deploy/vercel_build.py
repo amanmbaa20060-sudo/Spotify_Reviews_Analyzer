@@ -6,7 +6,16 @@ import os
 import sys
 from pathlib import Path
 
-PROJECT_ROOT = Path(__file__).resolve().parents[3]
+
+def resolve_project_root() -> Path:
+    """Locate repo root (works on Vercel build and after pip install)."""
+    for candidate in (Path.cwd(), *Path(__file__).resolve().parents):
+        if (candidate / "dashboard" / "index.html").is_file():
+            return candidate
+    return Path.cwd()
+
+
+PROJECT_ROOT = resolve_project_root()
 CONFIG_PATH = PROJECT_ROOT / "dashboard" / "static" / "js" / "config.js"
 
 

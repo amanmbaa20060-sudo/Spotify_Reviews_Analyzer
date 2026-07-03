@@ -26,7 +26,7 @@ The API runs on Render. Vercel serves the static `dashboard/` and proxies `/api/
 
 | Variable | Example | Required |
 |----------|---------|----------|
-| `API_BASE_URL` | `https://spotify-review-analyzer-api.onrender.com` | Yes |
+| `API_BASE_URL` | `https://spotifyreviewsanalyzerdashboard.onrender.com` | Yes |
 
 No trailing slash.
 
