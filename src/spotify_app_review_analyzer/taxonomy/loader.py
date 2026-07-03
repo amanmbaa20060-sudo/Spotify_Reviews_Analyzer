@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from importlib import resources
 from pathlib import Path
 from typing import Any
 
@@ -24,9 +25,15 @@ class Taxonomy:
 
 def load_taxonomy(path: Path | None = None) -> Taxonomy:
     if path is None:
-        path = Path(__file__).with_name("taxonomy_v1.yml")
+        text = (
+            resources.files("spotify_app_review_analyzer.taxonomy")
+            .joinpath("taxonomy_v1.yml")
+            .read_text(encoding="utf-8")
+        )
+    else:
+        text = path.read_text(encoding="utf-8")
 
-    data: dict[str, Any] = yaml.safe_load(path.read_text(encoding="utf-8"))
+    data: dict[str, Any] = yaml.safe_load(text)
     themes = tuple(Theme(**t) for t in data.get("themes", []))
     rq_raw = data.get("research_questions", {})
     research_questions = {

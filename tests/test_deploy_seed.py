@@ -38,3 +38,19 @@ def test_resolve_raw_dir_prefers_env_override(tmp_path, monkeypatch) -> None:
     (custom / "sample.json").write_text("[]", encoding="utf-8")
     monkeypatch.setenv("RAW_DATA_DIR", str(custom))
     assert resolve_raw_dir() == custom
+
+
+def test_taxonomy_yaml_is_package_resource() -> None:
+    from importlib import resources
+
+    path = resources.files("spotify_app_review_analyzer.taxonomy").joinpath("taxonomy_v1.yml")
+    assert path.is_file()
+    assert "themes:" in path.read_text(encoding="utf-8")
+
+
+def test_agent_prompt_is_package_resource() -> None:
+    from importlib import resources
+
+    path = resources.files("spotify_app_review_analyzer.agent").joinpath("prompts/v1.0/system.md")
+    assert path.is_file()
+    assert path.read_text(encoding="utf-8").strip()

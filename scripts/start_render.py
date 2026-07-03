@@ -15,8 +15,8 @@ from spotify_app_review_analyzer.core.settings import settings
 from spotify_app_review_analyzer.db.init_db import init_database
 from spotify_app_review_analyzer.deploy.seed import (
     auto_seed_enabled,
+    bootstrap_needed,
     resolve_raw_dir,
-    review_count,
     run_production_seed_if_empty,
 )
 
@@ -50,9 +50,9 @@ if __name__ == "__main__":
     scheme = settings.database_url.split(":", 1)[0]
     logger.info("Starting API on 0.0.0.0:%s (database=%s)", port, scheme)
 
-    if auto_seed_enabled() and review_count() == 0:
+    if auto_seed_enabled() and bootstrap_needed():
         raw_dir = resolve_raw_dir()
-        logger.info("Empty database detected; seeding from %s before serving traffic", raw_dir)
+        logger.info("Bootstrap needed; seeding/processing from %s before serving traffic", raw_dir)
         if not run_production_seed_if_empty():
             logger.error("Production seed did not complete; API will start with empty data")
 

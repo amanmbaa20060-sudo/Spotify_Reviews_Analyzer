@@ -1,15 +1,15 @@
 from __future__ import annotations
 
-from pathlib import Path
+from importlib import resources
 
 PROMPT_VERSION = "v1.0"
-PROMPTS_DIR = Path(__file__).parent / "prompts" / PROMPT_VERSION
 
 
 def load_prompt(name: str) -> str:
-    path = PROMPTS_DIR / f"{name}.md"
-    if not path.exists():
-        raise FileNotFoundError(f"Prompt template not found: {path}")
+    path = (
+        resources.files("spotify_app_review_analyzer.agent")
+        .joinpath("prompts", PROMPT_VERSION, f"{name}.md")
+    )
     return path.read_text(encoding="utf-8").strip()
 
 

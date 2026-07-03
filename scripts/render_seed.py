@@ -8,6 +8,7 @@ from spotify_app_review_analyzer.core.logging import configure_logging
 from spotify_app_review_analyzer.core.settings import settings
 from spotify_app_review_analyzer.deploy.seed import (
     auto_seed_enabled,
+    bootstrap_needed,
     resolve_raw_dir,
     review_count,
     run_production_seed_if_empty,
@@ -23,11 +24,14 @@ def main() -> int:
         logger.info("AUTO_SEED_IF_EMPTY is disabled; skipping seed.")
         return 0
 
-    if review_count() > 0:
-        logger.info("Database already has %s reviews; skipping seed.", review_count())
+    if not bootstrap_needed():
+        total = review_count()
+        logger.info("Database bootstrap not needed (%s reviews present).", total)
         return 0
 
-    if not resolve_raw_dir().is_dir() or not any(resolve_raw_dir().glob("*.json")):
+    if review_count() == 0 and (
+        not resolve_raw_dir().is_dir() or not any(resolve_raw_dir().glob("*.json"))
+    ):
         logger.error("Missing snapshot JSON files in %s", resolve_raw_dir())
         return 1
 

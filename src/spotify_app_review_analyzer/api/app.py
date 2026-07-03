@@ -20,7 +20,7 @@ from spotify_app_review_analyzer.db.init_db import init_database
 from spotify_app_review_analyzer.db.session import get_session
 from spotify_app_review_analyzer.deploy.seed import (
     auto_seed_enabled,
-    review_count,
+    bootstrap_needed,
     run_production_seed_if_empty,
     start_background_seed_if_empty,
 )
@@ -76,7 +76,7 @@ async def lifespan(_app: FastAPI):
     _warn_if_ephemeral_sqlite_on_render()
     init_database()
 
-    if auto_seed_enabled() and review_count() == 0:
+    if auto_seed_enabled() and bootstrap_needed():
         if os.getenv("RENDER") == "true":
             start_background_seed_if_empty()
         else:

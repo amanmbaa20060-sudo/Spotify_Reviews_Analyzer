@@ -37,6 +37,9 @@ package-dir = {"" = "src"}
 [tool.setuptools.packages.find]
 where = ["src"]
 
+[tool.setuptools.package-data]
+spotify_app_review_analyzer = ["taxonomy/*.yml", "agent/prompts/*/*.md"]
+
 [project.scripts]
 ingest = "spotify_app_review_analyzer.ingestion.cli:main"
 bootstrap-raw-data = "spotify_app_review_analyzer.scripts.bootstrap_raw_data:main"

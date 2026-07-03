@@ -67,6 +67,28 @@ def review_count() -> int:
         session.close()
 
 
+def pending_review_count() -> int:
+    session = get_session()
+    try:
+        return (
+            session.scalar(
+                select(func.count())
+                .select_from(Review)
+                .where(Review.processing_status == "pending")
+            )
+            or 0
+        )
+    finally:
+        session.close()
+
+
+def bootstrap_needed() -> bool:
+    total = review_count()
+    if total == 0:
+        return True
+    return pending_review_count() > 0
+
+
 def import_snapshots(session) -> int:
     raw_dir = resolve_raw_dir()
     service = IngestService(session)
@@ -108,9 +130,9 @@ def process_all(session) -> None:
 
 
 def run_production_seed_if_empty() -> bool:
-    """Seed from committed JSON snapshots when the database has no reviews.
+    """Import snapshots, process pending reviews, and build RQ briefings when needed.
 
-    Returns True if seeding ran, False if skipped.
+    Returns True if bootstrap work ran, False if skipped.
     """
     global _seeding, _seed_complete, _last_seed_error
 
@@ -127,22 +149,39 @@ def run_production_seed_if_empty() -> bool:
         try:
             init_database()
             existing = session.scalar(select(func.count()).select_from(Review)) or 0
-            if existing > 0:
-                logger.info("Database already has %s reviews; skipping seed.", existing)
+            pending = (
+                session.scalar(
+                    select(func.count())
+                    .select_from(Review)
+                    .where(Review.processing_status == "pending")
+                )
+                or 0
+            )
+
+            if existing > 0 and pending == 0:
+                logger.info("Database has %s processed reviews; skipping bootstrap.", existing)
                 _seed_complete = True
                 _last_seed_error = None
                 return False
 
-            if not raw_dir.is_dir() or not any(raw_dir.glob("*.json")):
-                _last_seed_error = f"Missing snapshot JSON files in {raw_dir}"
-                logger.error(_last_seed_error)
-                return False
-
             _seeding = True
             _last_seed_error = None
-            logger.info("Seeding empty database from %s", raw_dir)
-            inserted = import_snapshots(session)
-            logger.info("Imported %s new reviews from snapshots", inserted)
+
+            if existing == 0:
+                if not raw_dir.is_dir() or not any(raw_dir.glob("*.json")):
+                    _last_seed_error = f"Missing snapshot JSON files in {raw_dir}"
+                    logger.error(_last_seed_error)
+                    return False
+
+                logger.info("Seeding empty database from %s", raw_dir)
+                inserted = import_snapshots(session)
+                logger.info("Imported %s new reviews from snapshots", inserted)
+            else:
+                logger.info(
+                    "Resuming bootstrap for %s pending reviews (of %s total)",
+                    pending,
+                    existing,
+                )
 
             process_all(session)
 
@@ -162,11 +201,11 @@ def run_production_seed_if_empty() -> bool:
 
 
 def start_background_seed_if_empty() -> bool:
-    """Kick off seeding in a daemon thread when the DB is empty."""
+    """Kick off bootstrap in a daemon thread when the database needs work."""
     if not auto_seed_enabled() or _seed_complete or _seeding:
         return False
 
-    if review_count() > 0:
+    if not bootstrap_needed():
         return False
 
     def _run() -> None:
