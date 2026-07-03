@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import logging
 import os
+import time
 import threading
 from pathlib import Path
 
@@ -56,7 +57,9 @@ def is_seeding() -> bool:
 
 
 def seed_completed() -> bool:
-    return _seed_complete
+    if _seed_complete:
+        return True
+    return not bootstrap_needed()
 
 
 def review_count() -> int:
@@ -120,10 +123,19 @@ def import_snapshots(session) -> int:
 
 def process_all(session) -> None:
     service = ProcessingService(session)
+    total_processed = 0
     while True:
         metrics = service.process_batch(batch_size=settings.processing_batch_size, force=False)
         if metrics.fetched == 0:
             break
+        total_processed += metrics.processed
+        session.commit()
+        logger.info(
+            "Committed processing batch: fetched=%s processed=%s (running total=%s)",
+            metrics.fetched,
+            metrics.processed,
+            total_processed,
+        )
     embedded = service.rebuild_all_embeddings()
     session.commit()
     logger.info("Processing complete; rebuilt embeddings for %s reviews", embedded)
@@ -185,9 +197,21 @@ def run_production_seed_if_empty() -> bool:
 
             process_all(session)
 
-            RQAnalysisService(session).run(export=False)
-            session.commit()
-            logger.info("RQ briefing built in database context (exports skipped).")
+            pending_after = pending_review_count()
+            if pending_after > 0:
+                _last_seed_error = f"{pending_after} reviews still pending after processing"
+                logger.error(_last_seed_error)
+                return False
+
+            try:
+                RQAnalysisService(session).run(export=False)
+                session.commit()
+                logger.info("RQ briefing built in database context (exports skipped).")
+                _last_seed_error = None
+            except Exception as exc:
+                session.rollback()
+                _last_seed_error = f"RQ briefing failed: {exc}"
+                logger.exception("RQ briefing failed after processing completed")
             _seed_complete = True
             return True
         except Exception as exc:
@@ -202,15 +226,21 @@ def run_production_seed_if_empty() -> bool:
 
 def start_background_seed_if_empty() -> bool:
     """Kick off bootstrap in a daemon thread when the database needs work."""
-    if not auto_seed_enabled() or _seed_complete or _seeding:
+    if not auto_seed_enabled() or _seeding:
         return False
 
     if not bootstrap_needed():
         return False
 
     def _run() -> None:
-        run_production_seed_if_empty()
+        attempts = 0
+        while bootstrap_needed() and attempts < 5:
+            run_production_seed_if_empty()
+            if not bootstrap_needed():
+                break
+            attempts += 1
+            time.sleep(5)
 
     threading.Thread(target=_run, name="production-seed", daemon=True).start()
-    logger.warning("Database is empty; background seed started from %s", resolve_raw_dir())
+    logger.warning("Bootstrap started in background from %s", resolve_raw_dir())
     return True

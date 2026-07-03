@@ -3,7 +3,6 @@ from __future__ import annotations
 
 import logging
 import os
-import threading
 from contextlib import asynccontextmanager
 from pathlib import Path
 
@@ -21,7 +20,6 @@ from spotify_app_review_analyzer.db.session import get_session
 from spotify_app_review_analyzer.deploy.seed import (
     auto_seed_enabled,
     bootstrap_needed,
-    run_production_seed_if_empty,
     start_background_seed_if_empty,
 )
 from spotify_app_review_analyzer.processing.embeddings import EmbeddingStore
@@ -63,24 +61,13 @@ def _warn_if_ephemeral_sqlite_on_render() -> None:
         )
 
 
-def _bootstrap_data() -> None:
-    try:
-        if run_production_seed_if_empty():
-            _ensure_embedding_index()
-    except Exception:
-        logger.exception("Background production seed failed")
-
-
 @asynccontextmanager
 async def lifespan(_app: FastAPI):
     _warn_if_ephemeral_sqlite_on_render()
     init_database()
 
     if auto_seed_enabled() and bootstrap_needed():
-        if os.getenv("RENDER") == "true":
-            start_background_seed_if_empty()
-        else:
-            threading.Thread(target=_bootstrap_data, name="production-seed", daemon=True).start()
+        start_background_seed_if_empty()
     else:
         _ensure_embedding_index()
 

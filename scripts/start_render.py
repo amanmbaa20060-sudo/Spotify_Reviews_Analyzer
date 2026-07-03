@@ -10,12 +10,6 @@ import uvicorn
 from spotify_app_review_analyzer.core.logging import configure_logging
 from spotify_app_review_analyzer.core.settings import settings
 from spotify_app_review_analyzer.db.migrate import run_migrations
-from spotify_app_review_analyzer.deploy.seed import (
-    auto_seed_enabled,
-    bootstrap_needed,
-    resolve_raw_dir,
-    run_production_seed_if_empty,
-)
 
 logger = logging.getLogger(__name__)
 
@@ -28,12 +22,7 @@ if __name__ == "__main__":
     port = int(os.environ.get("PORT", "10000"))
     scheme = settings.database_url.split(":", 1)[0]
     logger.info("Starting API on 0.0.0.0:%s (database=%s)", port, scheme)
-
-    if auto_seed_enabled() and bootstrap_needed():
-        raw_dir = resolve_raw_dir()
-        logger.info("Bootstrap needed; seeding/processing from %s before serving traffic", raw_dir)
-        if not run_production_seed_if_empty():
-            logger.error("Production seed did not complete; API will start with empty data")
+    logger.info("Bootstrap runs in the background after the API starts when reviews are pending")
 
     uvicorn.run(
         "spotify_app_review_analyzer.api.app:app",
